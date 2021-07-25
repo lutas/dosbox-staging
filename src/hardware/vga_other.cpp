@@ -503,152 +503,90 @@ static void update_cga16_color()
 	vga.sharpness = sharpness * 256 / 100;
 }
 
-static int which_control = 0;
+enum COMPOSITE_KNOB { ERA, HUE, SATURATION, CONTRAST, BRIGHTNESS, SHARPNESS };
+static auto composite_knob = COMPOSITE_KNOB::ERA;
 
-static void LogControlValue()
+static void log_composite_knob_value()
 {
-	update_cga16_color();
-	switch (which_control) {
-	case 0:
-		LOG_MSG("%s model CGA selected", new_cga ? "Late" : "Early");
+	switch (composite_knob) {
+	case COMPOSITE_KNOB::ERA:
+		LOG_MSG("COMPOSITE: %s-era CGA selected",
+		        is_composite_new_era ? "New" : "Old");
 		break;
-	case 1: LOG_MSG("Hue: %f", hue_offset); break;
-	case 2: LOG_MSG("Saturation at %f", saturation); break;
-	case 3: LOG_MSG("Contrast at %f", contrast); break;
-	case 4: LOG_MSG("Brightness at %f", brightness); break;
-	case 5: LOG_MSG("Sharpness at %f", sharpness); break;
+	case COMPOSITE_KNOB::HUE:
+		LOG_MSG("COMPOSITE: Hue is %d", hue_offset);
+		break;
+	case COMPOSITE_KNOB::SATURATION:
+		LOG_MSG("COMPOSITE: Saturation at %d", saturation);
+		break;
+	case COMPOSITE_KNOB::CONTRAST:
+		LOG_MSG("COMPOSITE: Contrast at %d", contrast);
+		break;
+	case COMPOSITE_KNOB::BRIGHTNESS:
+		LOG_MSG("COMPOSITE: Brightness at %d", brightness);
+		break;
+	case COMPOSITE_KNOB::SHARPNESS:
+		LOG_MSG("COMPOSITE: Sharpness at %d", sharpness);
+		break;
 	}
 }
 
-static void IncreaseHue(bool pressed) {
-	if (!pressed)
-		return;
-	hue_offset += 5.0;
-	LogControlValue();
-}
- 
-static void DecreaseHue(bool pressed) {
-	if (!pressed)
-		return;
-	hue_offset -= 5.0;
-	LogControlValue();
-}
-
-static void IncreaseSaturation(bool pressed)
+enum KNOB_CHANGE : int8_t { POSITIVE = 5, NEGATIVE = -5 };
+static void turn_composite_knob(bool pressed, KNOB_CHANGE change)
 {
 	if (!pressed)
 		return;
-	saturation += 5;
-	LogControlValue();
-}
-
-static void DecreaseSaturation(bool pressed)
-{
-	if (!pressed)
-		return;
-	saturation -= 5;
-	LogControlValue();
-}
-
-static void IncreaseContrast(bool pressed)
-{
-	if (!pressed)
-		return;
-	contrast += 5;
-	LogControlValue();
-}
-
-static void DecreaseContrast(bool pressed)
-{
-	if (!pressed)
-		return;
-	contrast -= 5;
-	LogControlValue();
-}
-
-static void IncreaseBrightness(bool pressed)
-{
-	if (!pressed)
-		return;
-	brightness += 5;
-	LogControlValue();
-}
-
-static void DecreaseBrightness(bool pressed)
-{
-	if (!pressed)
-		return;
-	brightness -= 5;
-	LogControlValue();
-}
-
-static void IncreaseSharpness(bool pressed)
-{
-	if (!pressed)
-		return;
-	sharpness += 5;
-	LogControlValue();
-}
-
-static void DecreaseSharpness(bool pressed)
-{
-	if (!pressed)
-		return;
-	sharpness -= 5;
-	LogControlValue();
-}
-
-static void CGAModel(bool pressed)
-{
-	if (!pressed)
-		return;
-	new_cga = !new_cga;
-	LogControlValue();
-}
-
-static void IncreaseControlValue(bool pressed)
-{
-	if (!pressed)
-		return;
-	switch (which_control) {
-	case 0: CGAModel(true); break;
-	case 1: IncreaseHue(true); break;
-	case 2: IncreaseSaturation(true); break;
-	case 3: IncreaseContrast(true); break;
-	case 4: IncreaseBrightness(true); break;
-	case 5: IncreaseSharpness(true); break;
+	switch (composite_knob) {
+	case COMPOSITE_KNOB::ERA:
+		is_composite_new_era = !is_composite_new_era;
+		break;
+	case COMPOSITE_KNOB::HUE:
+		hue_offset += change;
+		hue_offset %= 360;
+		break;
+	case COMPOSITE_KNOB::SATURATION: saturation += change; break;
+	case COMPOSITE_KNOB::CONTRAST: contrast += change; break;
+	case COMPOSITE_KNOB::BRIGHTNESS: brightness += change; break;
+	case COMPOSITE_KNOB::SHARPNESS: sharpness += change; break;
 	}
+	update_cga16_color();
+	log_composite_knob_value();
 }
 
-static void DecreaseControlValue(bool pressed)
+static void turn_composite_knob_positive(bool pressed)
+{
+	turn_composite_knob(pressed, KNOB_CHANGE::POSITIVE);
+}
+
+static void turn_composite_knob_negative(bool pressed)
+{
+	turn_composite_knob(pressed, KNOB_CHANGE::NEGATIVE);
+}
+
+static void select_next_composite_knob(bool pressed)
 {
 	if (!pressed)
 		return;
-	switch (which_control) {
-	case 0: CGAModel(true); break;
-	case 1: DecreaseHue(true); break;
-	case 2: DecreaseSaturation(true); break;
-	case 3: DecreaseContrast(true); break;
-	case 4: DecreaseBrightness(true); break;
-	case 5: DecreaseSharpness(true); break;
+	switch (composite_knob) {
+	case COMPOSITE_KNOB::ERA: composite_knob = COMPOSITE_KNOB::HUE; break;
+	case COMPOSITE_KNOB::HUE:
+		composite_knob = COMPOSITE_KNOB::SATURATION;
+		break;
+	case COMPOSITE_KNOB::SATURATION:
+		composite_knob = COMPOSITE_KNOB::CONTRAST;
+		break;
+	case COMPOSITE_KNOB::CONTRAST:
+		composite_knob = COMPOSITE_KNOB::BRIGHTNESS;
+		break;
+	case COMPOSITE_KNOB::BRIGHTNESS:
+		composite_knob = COMPOSITE_KNOB::SHARPNESS;
+		break;
+	case COMPOSITE_KNOB::SHARPNESS:
+		composite_knob = COMPOSITE_KNOB::ERA;
+		break;
 	}
+	log_composite_knob_value();
 }
-
-static void CycleWhichControl(bool pressed)
-{
-	if (!pressed)
-		return;
-	which_control = (which_control + 1) % 6;
-	LogControlValue();
-}
-
-/*
-static void DecreaseWhichControl(bool pressed) {
-        if (!pressed)
-                return;
-        which_control = (which_control + 5)%6;
-        LogControlValue();
- } */
 
 static void write_cga_color_select(uint8_t val)
 {
@@ -819,7 +757,7 @@ static void TANDY_FindMode()
 
 static void PCJr_FindMode()
 {
-	new_cga = 1;
+	is_composite_new_era = true;
 	if (vga.tandy.mode_control & 0x2) {
 		if (vga.tandy.mode_control & 0x10) {
 			/* bit4 of mode control 1 signals 16 colour graphics mode */
@@ -1207,12 +1145,13 @@ void VGA_SetupOther(void)
 		IO_RegisterWriteHandler(0x3d8,write_cga,IO_MB);
 		IO_RegisterWriteHandler(0x3d9,write_cga,IO_MB);
 		if (!mono_cga) {
-			MAPPER_AddHandler(CycleWhichControl, SDL_SCANCODE_F10,
-			                  0, "select", "Sel Ctl");
-			MAPPER_AddHandler(DecreaseControlValue, SDL_SCANCODE_F11,
-			                  MMOD2, "decval", "Dec Val");
-			MAPPER_AddHandler(IncreaseControlValue, SDL_SCANCODE_F11,
-			                  0, "incval", "Inc Val");
+			MAPPER_AddHandler(select_next_composite_knob,
+			                  SDL_SCANCODE_F10, 0, "select", "Sel Knob");
+			MAPPER_AddHandler(turn_composite_knob_positive,
+			                  SDL_SCANCODE_F11, 0, "incval", "Inc Knob");
+			MAPPER_AddHandler(turn_composite_knob_negative,
+			                  SDL_SCANCODE_F11, MMOD2, "decval",
+			                  "Dec Knob");
 			MAPPER_AddHandler(Composite, SDL_SCANCODE_F12, 0,
 			                  "cgacomp", "CGA Comp");
 		} else {
@@ -1235,12 +1174,12 @@ void VGA_SetupOther(void)
 		write_pcjr( 0x3df, 0x7 | (0x7 << 3), 0 );
 		IO_RegisterWriteHandler(0x3da,write_pcjr,IO_MB);
 		IO_RegisterWriteHandler(0x3df,write_pcjr,IO_MB);
-		MAPPER_AddHandler(CycleWhichControl, SDL_SCANCODE_F10, 0,
-		                  "select", "Sel Ctl");
-		MAPPER_AddHandler(DecreaseControlValue, SDL_SCANCODE_F11, MMOD2,
-		                  "decval", "Dec Val");
-		MAPPER_AddHandler(IncreaseControlValue, SDL_SCANCODE_F11, 0,
-		                  "incval", "Inc Val");
+		MAPPER_AddHandler(select_next_composite_knob, SDL_SCANCODE_F10,
+		                  0, "select", "Sel Knob");
+		MAPPER_AddHandler(turn_composite_knob_positive,
+		                  SDL_SCANCODE_F11, 0, "incval", "Inc Knob");
+		MAPPER_AddHandler(turn_composite_knob_negative,
+		                  SDL_SCANCODE_F11, MMOD2, "decval", "Dec Knob");
 		MAPPER_AddHandler(Composite, SDL_SCANCODE_F12, 0, "cgacomp",
 		                  "CGA Comp");
 	}
