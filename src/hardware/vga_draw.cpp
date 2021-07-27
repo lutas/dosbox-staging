@@ -25,6 +25,8 @@
 #include "../gui/render_scalers.h"
 #include "vga.h"
 #include "pic.h"
+#include "pinhacks.h"
+#include <cstdio>
 
 //#undef C_DEBUG
 //#define C_DEBUG 1
@@ -686,7 +688,11 @@ static void VGA_DrawSingleLine(Bitu /*blah*/) {
 		vga.draw.address+=vga.draw.address_add;
 	}
 	vga.draw.lines_done++;
-	if (vga.draw.split_line==vga.draw.lines_done) VGA_ProcessSplit();
+
+	if (pinhack.trigger == false) {
+		if (vga.draw.split_line == vga.draw.lines_done)
+			VGA_ProcessSplit();
+	}
 	if (vga.draw.lines_done < vga.draw.lines_total) {
 		PIC_AddEvent(VGA_DrawSingleLine,(float)vga.draw.delay.htotal);
 	} else RENDER_EndUpdate(false);
@@ -1548,6 +1554,42 @@ void VGA_SetupDrawing(Bitu /*val*/) {
 			height/=2;
 		}
 	}
+	if (pinhack.enabled)
+	{                             // Enabled in config?
+		printf("PINHACK: "); // Check for tirggering preconditions...
+		if ((!pinhack.specifichack.pinballdreams.enabled ||
+		      pinhack.specifichack.pinballdreams.trigger) &&
+		     (height >= pinhack.triggerheight.min &&
+		       height <= pinhack.triggerheight.max) &&
+		     (pinhack.triggerwidth.min <= width &&
+		       width <= pinhack.triggerwidth.max))
+		{
+			printf("triggered -> ");
+			pinhack.trigger = true;
+			printf("original geometry: %dx%d. expanding to geometry: %dx%d.\n",
+			        width, height,
+			        +pinhack.expand.width ? pinhack.expand.width : width,
+			        +pinhack.expand.height ? pinhack.expand.height
+			                               : height);
+			// If width or height not set, do not expand!
+			        if (pinhack.expand.height)
+			                height = pinhack.expand.height;
+			if (pinhack.expand.width) width = pinhack.expand.width;
+			if (pinhack.specifichack.pinballdreams.trigger)
+			         pinhack.specifichack.pinballdreams.trigger =
+			        false; // On next resolution change, return to
+			               // normal
+			
+		}
+		else
+		{
+			pinhack.trigger = false;
+			printf("trigger values evalueted but not triggered! Current resolution: %dx%d\n",
+			        width, height);
+			
+		};
+		
+	}
 	vga.draw.lines_total=height;
 	vga.draw.parts_lines=vga.draw.lines_total/vga.draw.parts_total;
 	vga.draw.line_length = width * ((bpp + 1) / 8);
@@ -1600,6 +1642,11 @@ void VGA_SetupDrawing(Bitu /*val*/) {
 
 		vga.draw.width = width;
 		vga.draw.height = height;
+		if (pinhack.trigger) {
+			if (pinhack.doublewidth == "yes") doublewidth = true;
+			if (pinhack.doublewidth == "no") doublewidth = false;
+			printf("PINHACK: Doublewidth: %s\n", pinhack.doublewidth);
+		}
 		vga.draw.doublewidth = doublewidth;
 		vga.draw.doubleheight = doubleheight;
 		vga.draw.aspect_ratio = aspect_ratio;

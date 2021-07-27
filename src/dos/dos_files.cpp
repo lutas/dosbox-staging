@@ -33,6 +33,8 @@
 #include "string_utils.h"
 #include "support.h"
 
+#include "pinhacks.h"
+
 #define DOS_FILESTART 4
 
 #define FCB_SUCCESS     0
@@ -537,6 +539,14 @@ bool DOS_OpenFile(char const * name,Bit8u flags,Bit16u * entry,bool fcb) {
 	/* First check for devices */
 	if (flags>2) LOG(LOG_FILES,LOG_ERROR)("Special file open command %X file %s",flags,name);
 	else LOG(LOG_FILES,LOG_NORMAL)("file open command %X file %s",flags,name);
+
+	if (pinhack.enabled && pinhack.specifichack.pinballdreams.enabled) {
+		if (!strcmp(name, "flippers.spr"))
+		{
+			printf("PINHACK: pinhackpd: flippers.spr loaded, hack should trigger on next resolution change.\n");
+			pinhack.specifichack.pinballdreams.trigger = true;
+		};
+	}
 
 	Bit16u attr = 0;
 	Bit8u devnum = DOS_FindDevice(name);
