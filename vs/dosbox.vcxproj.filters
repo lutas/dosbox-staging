@@ -570,6 +570,9 @@
     <ClInclude Include="..\include\pic.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\pinhacks.h">
+      <Filter>include</Filter>
+    </ClInclude>
     <ClInclude Include="..\include\programs.h">
       <Filter>include</Filter>
     </ClInclude>

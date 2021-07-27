@@ -9,16 +9,19 @@
 #define PINHACKVERSION 3 
 
 extern struct scrollhack {
-	bool enabled,trigger;
-	struct { 
+	bool enabled, trigger;
+	struct {
 		int min, max;
-	}triggerwidth,triggerheight;
-	struct {int height, width;} expand;
-	struct {struct { bool enabled,trigger;}
-		psychopinball,
-		pinballdreams;
-	}specifichack;
-	const char * doublewidth;
+	} triggerwidth, triggerheight;
+	struct {
+		int height, width;
+	} expand;
+	struct {
+		struct {
+			bool enabled, trigger;
+		} psychopinball, pinballdreams;
+	} specifichack;
+	const char *doublewidth;
 } pinhack;
   
 #endif /* __DOSBOX_PINHACK_H */

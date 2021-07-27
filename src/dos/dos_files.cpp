@@ -30,10 +30,10 @@
 #include "regs.h"
 #include "drives.h"
 #include "cross.h"
+#include "pinhacks.h"
 #include "string_utils.h"
 #include "support.h"
 
-#include "pinhacks.h"
 
 #define DOS_FILESTART 4
 

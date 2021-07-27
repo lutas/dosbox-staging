@@ -88,7 +88,7 @@
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(Platform)\$(Configuration)\</OutDir>
+    <OutDir>C:\dev\pinball\Pinball Dreams Deluxe\DOSBOX</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
     <EnableManagedIncrementalBuild>true</EnableManagedIncrementalBuild>
     <LinkIncremental>false</LinkIncremental>
@@ -463,6 +463,7 @@
     <ClInclude Include="..\include\paging.h" />
     <ClInclude Include="..\include\pci_bus.h" />
     <ClInclude Include="..\include\pic.h" />
+    <ClInclude Include="..\include\pinhacks.h" />
     <ClInclude Include="..\include\programs.h" />
     <ClInclude Include="..\include\regs.h" />
     <ClInclude Include="..\include\render.h" />

@@ -731,14 +731,17 @@ static void VGA_DrawPart(Bitu lines) {
 			vga.draw.address+=vga.draw.address_add;
 		}
 		vga.draw.lines_done++;
-		if (vga.draw.split_line==vga.draw.lines_done) {
+		if (!pinhack.enabled) {
+			if (vga.draw.split_line == vga.draw.lines_done) {
 #ifdef VGA_KEEP_CHANGES
-			VGA_ChangesEnd( );
+				VGA_ChangesEnd();
 #endif
-			VGA_ProcessSplit();
+				VGA_ProcessSplit();
 #ifdef VGA_KEEP_CHANGES
-			vga.changes.start = vga.draw.address >> VGA_CHANGE_SHIFT;
+				vga.changes.start = vga.draw.address >>
+				                    VGA_CHANGE_SHIFT;
 #endif
+			}
 		}
 	}
 	if (--vga.draw.parts_left) {
@@ -1568,16 +1571,18 @@ void VGA_SetupDrawing(Bitu /*val*/) {
 			pinhack.trigger = true;
 			printf("original geometry: %dx%d. expanding to geometry: %dx%d.\n",
 			        width, height,
-			        +pinhack.expand.width ? pinhack.expand.width : width,
-			        +pinhack.expand.height ? pinhack.expand.height
+			        pinhack.expand.width ? pinhack.expand.width : width,
+			        pinhack.expand.height ? pinhack.expand.height
 			                               : height);
 			// If width or height not set, do not expand!
-			        if (pinhack.expand.height)
-			                height = pinhack.expand.height;
-			if (pinhack.expand.width) width = pinhack.expand.width;
+			if (pinhack.expand.height)
+			    height = pinhack.expand.height;
+
+			if (pinhack.expand.width) 
+				width = pinhack.expand.width;
+
 			if (pinhack.specifichack.pinballdreams.trigger)
-			         pinhack.specifichack.pinballdreams.trigger =
-			        false; // On next resolution change, return to
+			    pinhack.specifichack.pinballdreams.trigger = false; // On next resolution change, return to
 			               // normal
 			
 		}
@@ -1586,7 +1591,6 @@ void VGA_SetupDrawing(Bitu /*val*/) {
 			pinhack.trigger = false;
 			printf("trigger values evalueted but not triggered! Current resolution: %dx%d\n",
 			        width, height);
-			
 		};
 		
 	}
@@ -1643,8 +1647,8 @@ void VGA_SetupDrawing(Bitu /*val*/) {
 		vga.draw.width = width;
 		vga.draw.height = height;
 		if (pinhack.trigger) {
-			if (pinhack.doublewidth == "yes") doublewidth = true;
-			if (pinhack.doublewidth == "no") doublewidth = false;
+			if (stricmp(pinhack.doublewidth, "yes") == 0) doublewidth = true;
+			if (stricmp(pinhack.doublewidth, "no") == 0) doublewidth = false;
 			printf("PINHACK: Doublewidth: %s\n", pinhack.doublewidth);
 		}
 		vga.draw.doublewidth = doublewidth;
