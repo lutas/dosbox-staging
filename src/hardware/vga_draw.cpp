@@ -723,14 +723,8 @@ static void VGA_DrawEGASingleLine(Bitu /*blah*/) {
 	} else RENDER_EndUpdate(false);
 }
 
-static int frame = 0;
 static void VGA_DrawPart(Bitu lines)
 {
-	pinballDM.updateData(vga.draw.linear_base);
-	if (frame++ == 20) {
-		frame = 0;
-		pinballDM.dumpToConsole();
-	}
 
 	while (lines--) {
 		Bit8u * data=VGA_DrawLine( vga.draw.address, vga.draw.address_line );
@@ -804,7 +798,14 @@ static void INLINE VGA_ChangesStart( void ) {
 }
 #endif
 
+static int frame = 0;
 static void VGA_VertInterrupt(Bitu /*val*/) {
+	pinballDM.updateData(vga.draw.linear_base);
+	if (frame++ == 20) {
+		frame = 0;
+		pinballDM.transport();
+	}
+
 	if ((!vga.draw.vret_triggered) && ((vga.crtc.vertical_retrace_end&0x30)==0x10)) {
 		vga.draw.vret_triggered=true;
 		if (GCC_UNLIKELY(machine==MCH_EGA)) PIC_ActivateIRQ(9);
