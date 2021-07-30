@@ -1,10 +1,35 @@
 
 #include "pinball-dm.h"
 #include <vcruntime_string.h>
+#include "serialport/libserial.h"
+
+namespace {
+
+	COMPORT comport;
+
+
+}
 
 
 PinballDM::PinballDM() 
 {
+	if (!SERIAL_open("COM6", &comport)) {
+		char errorbuffer[256];
+		SERIAL_getErrorString(errorbuffer, sizeof(errorbuffer));
+
+		printf(errorbuffer);
+	}
+	if (!SERIAL_setCommParameters(comport, 9600, 0, 1, 8)) {
+		int y = 0;
+	}
+}
+
+PinballDM::~PinballDM()
+{
+	if (comport) {
+		SERIAL_close(comport);
+		comport = NULL;
+	}
 }
 
 #define IS_ON(xx, yy, cc) \
@@ -40,9 +65,32 @@ void PinballDM::updateData(Bit8u *frameBuffer)
 
 		 y += 2;
 		 ch.row5 = (IS_ON(6, y, ci) << 1) | (IS_ON(12, y, ci));
-
-		 //memset(&ch, 0xFFFF, 4);
 	 }
+}
+
+uint16_t PinballDM::bitMaskChar(const PinballCharacter &ch) const
+{
+	uint16_t val = 0;
+	// row 1
+	val |= ch.row1;
+	val |= (ch.row2 << 2);
+	val |= (ch.row3 << 7);
+	val |= (ch.row4 << 9);
+	val |= (ch.row5 << 14);
+
+	return val;
+}
+
+void PinballDM::transport() const
+{
+	// pack bits for transport
+	uint16_t val[NUM_CHARACTERS] = {0};
+
+	for (int i = 0; i < NUM_CHARACTERS; ++i) {
+		val[i] = bitMaskChar(_characters[i]);
+	}
+
+	SERIAL_senddata(comport, val, sizeof(val));
 }
 
 void PinballDM::dumpToConsole() const

@@ -192,6 +192,21 @@ bool SERIAL_sendchar(COMPORT port, char data) {
 	else return false;
 }
 
+bool SERIAL_senddata(COMPORT port, void *data, int length)
+{
+	DWORD bytesWritten;
+
+	// mean bug: with break = 1, WriteFile will never return.
+	if (port->breakstatus)
+		return true; // true or false?!
+
+	WriteFile(port->porthandle, data, length, &bytesWritten, NULL);
+	if (bytesWritten == 1)
+		return true;
+	else
+		return false;
+}
+
 // 0-7 char data, higher=flags
 int SERIAL_getextchar(COMPORT port) {
 	DWORD errors = 0;	// errors from API
@@ -375,6 +390,17 @@ bool SERIAL_sendchar(COMPORT port, char data) {
 	int bytesWritten = write(port->porthandle, &data, 1);
 	if(bytesWritten==1) return true;
 	else return false;
+}
+
+bool SERIAL_senddata(COMPORT port, void* data, int length)
+{
+	if (port->breakstatus)
+		return true; // true or false?!; Does POSIX need this check?
+	int bytesWritten = write(port->porthandle, data, length);
+	if (bytesWritten == 1)
+		return true;
+	else
+		return false;
 }
 
 int SERIAL_getextchar(COMPORT port) {

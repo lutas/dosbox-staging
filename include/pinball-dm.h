@@ -21,10 +21,10 @@
  */
 
 struct PinballCharacter {
-	uint8_t row2 : 5;
-	uint8_t row4 : 5;
 	uint8_t row1 : 2;
+	uint8_t row2 : 5;
 	uint8_t row3 : 2;
+	uint8_t row4 : 5;
 	uint8_t row5 : 2;
 }; //2 bytes
 
@@ -34,14 +34,19 @@ class PinballDM {
 public:
 
 	PinballDM();
+	virtual ~PinballDM();
 
 	void updateData(Bit8u* frameBuffer);
 
 	void save(const char *szFilename);
 	void dumpToConsole() const;
 
+	void transport() const;
+
 private:
 	PinballCharacter _characters[NUM_CHARACTERS];
+
+	uint16_t bitMaskChar(const PinballCharacter &ch) const;
 };
 
 

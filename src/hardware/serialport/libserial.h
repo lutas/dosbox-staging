@@ -46,6 +46,7 @@ int SERIAL_getmodemstatus(COMPORT port);
 bool SERIAL_setmodemcontrol(COMPORT port, int flags);
 
 bool SERIAL_sendchar(COMPORT port, char data);
+bool SERIAL_senddata(COMPORT port, void *data, int length);
 
 // 0-7 char data, higher=flags
 #define SERIAL_BREAK_ERR 0x10
