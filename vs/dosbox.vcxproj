@@ -380,6 +380,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\dosbox.cpp" />
+    <ClCompile Include="..\src\hardware\pinball-dm.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\cpu\callback.cpp" />
     <ClCompile Include="..\src\cpu\core_dynrec.cpp" />
@@ -575,6 +576,7 @@
     <ClInclude Include="..\include\paging.h" />
     <ClInclude Include="..\include\pci_bus.h" />
     <ClInclude Include="..\include\pic.h" />
+    <ClInclude Include="..\include\pinball-dm.h" />
     <ClInclude Include="..\include\pinhacks.h" />
     <ClInclude Include="..\include\programs.h" />
     <ClInclude Include="..\include\regs.h" />

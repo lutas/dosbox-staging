@@ -481,6 +481,9 @@
     <ClCompile Include="..\src\misc\pacer.cpp">
       <Filter>src\misc</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\hardware\pinball-dm.cpp">
+      <Filter>src\hardware</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\bios.h">
@@ -914,6 +917,9 @@
     </ClInclude>
     <ClInclude Include="..\src\libs\residfp\WaveformGenerator.h">
       <Filter>src\libs\residfp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\pinball-dm.h">
+      <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

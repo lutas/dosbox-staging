@@ -26,7 +26,7 @@
 #include "vga.h"
 #include "pic.h"
 #include "pinhacks.h"
-#include <cstdio>
+#include "pinball-dm.h"
 
 //#undef C_DEBUG
 //#define C_DEBUG 1
@@ -38,6 +38,8 @@ typedef Bit8u * (* VGA_Line_Handler)(Bitu vidstart, Bitu line);
 
 static VGA_Line_Handler VGA_DrawLine;
 static Bit8u TempLine[SCALER_MAXWIDTH * 4];
+
+static PinballDM pinballDM;
 
 static Bit8u * VGA_Draw_1BPP_Line(Bitu vidstart, Bitu line) {
 	const Bit8u *base = vga.tandy.draw_base + ((line & vga.tandy.line_mask) << vga.tandy.line_shift);
@@ -721,75 +723,13 @@ static void VGA_DrawEGASingleLine(Bitu /*blah*/) {
 	} else RENDER_EndUpdate(false);
 }
 
-
-static int frameCheck = 0;
-const char *On = "1";
-const char *Off = "0";
-const char *endl = "\n";
-
-const char *files[] = {"c:\\dev\\tmp\\dmd1.txt", "c:\\dev\\tmp\\dmd2.txt"};
-int activeFile = 0;
-FILE *fp = NULL;
-
+static int frame = 0;
 static void VGA_DrawPart(Bitu lines)
 {
-	// save out file
-
-	if (frameCheck == 0) {
-		fp = fopen(files[activeFile], "wb");
-		activeFile = 1 - activeFile;
-	}
-
-	// write 1 line per frame 
-	// we need 20 lines, so 3 updates per sec
-
-	/*
-	* just need to get 1 pixel for each of the segments
-	* 16x segments per character
-	* 20x characters in total
-			 - -
-			|\|/|
-			 - -
-			|/|\|
-			 - -
-	 */
-
-	//int y = frameCheck % 20;
-	//const int pixelInsetY = 3; //ignore top pixels since they're always black
-	//const int pixelsPerCharacter = 16;
-	//const Bit8u *lineOffset = vga.draw.linear_base + ((y + pixelInsetY) * 320);
-	//int characterOffset = 0;
-
-	//const Bit8u *charLineOffset = lineOffset + 
-	//                              (characterOffset * pixelsPerCharacter);
-
-	//switch (y) {
-	//	case 0: {
-	//		// top line
-	//	        bool isOn = *(charLineOffset + 6);
-
-	//	        fwrite(isOn == 0xFF ? '-' : Off, sizeof(char), 1, fp);
-	//		
-
-
-	//}
-
-
-	if (fp) {
-		int y = frameCheck % 20;
-		for (int x = 0; x < 320; ++x) {
-			Bit8u *dmdStart = vga.draw.linear_base + (320 * 3);
-			uint8_t val = *(dmdStart + (y * 320) + x);
-
-			fwrite(val == 0xFF ? On : Off, sizeof(char), 1, fp);
-		}
-		fwrite(endl, sizeof(char), 1, fp);
-	}
-
-	++frameCheck;
-	if (frameCheck == 20) {
-		frameCheck = 0;
-		fclose(fp);
+	pinballDM.updateData(vga.draw.linear_base);
+	if (frame++ == 20) {
+		frame = 0;
+		pinballDM.dumpToConsole();
 	}
 
 	while (lines--) {
