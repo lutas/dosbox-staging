@@ -213,6 +213,9 @@ static void PINHACK_Init(Section *sec)
 	                  pinhack.triggerwidth.max, '-');
 	if ((pinhack.triggerwidth.min == 0) && (pinhack.triggerwidth.max == 0))
 		pinhack.triggerwidth.max = 9999;
+	pinhack.dotmatrix.on = section->Get_bool("pinhackdotmatrixenable");
+	pinhack.dotmatrix.port = section->Get_string("pinhackdotmatrixport");
+
 	printf("PINHACK: Your DOSBox has been hacked with pinball hacks V %d ",
 	       PINHACKVERSION);
 	if (pinhack.enabled) {
@@ -529,6 +532,13 @@ void DOSBOX_Init(void) {
 	        "Used to enable forcing (or disabling) doublewidth with pinhack. The original patch disabled it,\n"
 	        "but you may find it better enabled, or left to decide by dosbox and use aspect ratio correction insread.\n"
 	        "normal=do not touch the setting, let DOSBox decide. yes=doublewidth. no=no doublewidth");
+
+	Pbool = secprop->Add_bool("pinhackdotmatrixenable", Property::Changeable::Always, false);
+	Pbool->Set_help("Boolean: Used to enable external dotmatrix output for Pinball Dreams");
+
+	Pstring = secprop->Add_string("pinhackdotmatrixport",
+	                              Property::Changeable::Always, "");
+	Pstring->Set_help("Port to send dotmatrix data over serial");
 
 	// PINHACK: end config file section
 		

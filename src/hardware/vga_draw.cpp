@@ -26,7 +26,8 @@
 #include "vga.h"
 #include "pic.h"
 #include "pinhacks.h"
-#include "pinball-dm.h"
+#include "../pinball/pinball-dm.h"
+#include "../pinball/pinball-serial.h"
 
 //#undef C_DEBUG
 //#define C_DEBUG 1
@@ -40,6 +41,7 @@ static VGA_Line_Handler VGA_DrawLine;
 static Bit8u TempLine[SCALER_MAXWIDTH * 4];
 
 static PinballDM pinballDM;
+static PinballSerial pinballSerial;
 
 static Bit8u * VGA_Draw_1BPP_Line(Bitu vidstart, Bitu line) {
 	const Bit8u *base = vga.tandy.draw_base + ((line & vga.tandy.line_mask) << vga.tandy.line_shift);
@@ -800,10 +802,12 @@ static void INLINE VGA_ChangesStart( void ) {
 
 static int frame = 0;
 static void VGA_VertInterrupt(Bitu /*val*/) {
-	pinballDM.updateData(vga.draw.linear_base);
-	if (frame++ == 20) {
-		frame = 0;
-		pinballDM.transport();
+	if (pinhack.dotmatrix.on) {
+		pinballDM.updateData(vga.draw.linear_base);
+		if (frame++ == 20) {
+			pinballSerial.sendDMBuffer(pinballDM);
+			frame = 0;
+		}
 	}
 
 	if ((!vga.draw.vret_triggered) && ((vga.crtc.vertical_retrace_end&0x30)==0x10)) {
@@ -1596,7 +1600,12 @@ void VGA_SetupDrawing(Bitu /*val*/) {
 			if (pinhack.specifichack.pinballdreams.trigger)
 			    pinhack.specifichack.pinballdreams.trigger = false; // On next resolution change, return to
 			               // normal
-			
+
+			if (pinhack.dotmatrix.on) {
+				if (!pinballSerial.isConnected()) {
+					pinballSerial.connect(pinhack.dotmatrix.port);
+				}
+			}
 		}
 		else
 		{

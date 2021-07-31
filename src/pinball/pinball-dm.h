@@ -36,16 +36,15 @@ public:
 	PinballDM();
 	virtual ~PinballDM();
 
-	void updateData(Bit8u* frameBuffer);
+	void updateData(Bit8u *frameBuffer);
 
-	void save(const char *szFilename);
-	void dumpToConsole() const;
-
-	void transport() const;
+	inline int getNumCharacters() const { return NUM_CHARACTERS; }
+	uint16_t getCharacterForTransport(int characterIndex) const;
+	
+	void dumpData(const char *filename) const;
 
 private:
 	PinballCharacter _characters[NUM_CHARACTERS];
-
 	uint16_t bitMaskChar(const PinballCharacter &ch) const;
 };
 

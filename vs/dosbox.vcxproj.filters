@@ -481,8 +481,11 @@
     <ClCompile Include="..\src\misc\pacer.cpp">
       <Filter>src\misc</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\hardware\pinball-dm.cpp">
-      <Filter>src\hardware</Filter>
+    <ClCompile Include="..\src\pinball\pinball-dm.cpp">
+      <Filter>src\pinball</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\pinball\pinball-serial.cpp">
+      <Filter>src\pinball</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -918,8 +921,11 @@
     <ClInclude Include="..\src\libs\residfp\WaveformGenerator.h">
       <Filter>src\libs\residfp</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\pinball-dm.h">
-      <Filter>include</Filter>
+    <ClInclude Include="..\src\pinball\pinball-dm.h">
+      <Filter>src\pinball</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\pinball\pinball-serial.h">
+      <Filter>src\pinball</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1013,6 +1019,9 @@
     </Filter>
     <Filter Include="src\libs\residfp">
       <UniqueIdentifier>{e8ef008d-ceb9-4224-9b9e-b5b62933ca0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\pinball">
+      <UniqueIdentifier>{f6f22b11-0601-4ca5-9736-dd44678d22e1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

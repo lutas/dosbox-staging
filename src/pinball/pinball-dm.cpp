@@ -1,35 +1,14 @@
 
 #include "pinball-dm.h"
 #include <vcruntime_string.h>
-#include "serialport/libserial.h"
-
-namespace {
-
-	COMPORT comport;
-
-
-}
-
+#include <cassert>
 
 PinballDM::PinballDM() 
 {
-	if (!SERIAL_open("COM6", &comport)) {
-		char errorbuffer[256];
-		SERIAL_getErrorString(errorbuffer, sizeof(errorbuffer));
-
-		printf(errorbuffer);
-	}
-	if (!SERIAL_setCommParameters(comport, 9600, 0, 1, 8)) {
-		int y = 0;
-	}
 }
 
 PinballDM::~PinballDM()
 {
-	if (comport) {
-		SERIAL_close(comport);
-		comport = NULL;
-	}
 }
 
 #define IS_ON(xx, yy, cc) \
@@ -40,9 +19,6 @@ void PinballDM::updateData(Bit8u *frameBuffer)
 	// save out file
 	// write 1 line per frame
 	// we need 20 lines, so 3 updates per sec
-	 const int pixelInsetY = 3; //ignore top pixels since they're always black
-	 
-	 const int pixelsPerCharacter = 16; 
 
 	 for (int ci = 0; ci < NUM_CHARACTERS; ++ci) {
 		 PinballCharacter &ch = _characters[ci];
@@ -81,21 +57,16 @@ uint16_t PinballDM::bitMaskChar(const PinballCharacter &ch) const
 	return val;
 }
 
-void PinballDM::transport() const
+uint16_t PinballDM::getCharacterForTransport(int characterIndex) const
 {
-	// pack bits for transport
-	uint16_t val[NUM_CHARACTERS] = {0};
+	assert(characterIndex >= 0 && characterIndex < NUM_CHARACTERS);
 
-	for (int i = 0; i < NUM_CHARACTERS; ++i) {
-		val[i] = bitMaskChar(_characters[i]);
-	}
-
-	SERIAL_senddata(comport, val, sizeof(val));
+	return bitMaskChar(_characters[characterIndex]);
 }
 
-void PinballDM::dumpToConsole() const
+void PinballDM::dumpData(const char* filename) const
 {
-	FILE *fp = fopen("c:\\dev\\tmp\\dmd-new1.txt", "wb");
+	FILE *fp = fopen(filename, "wb");
 
 	// row1
 	for (int c = 0; c < NUM_CHARACTERS; ++c) {
@@ -140,45 +111,4 @@ void PinballDM::dumpToConsole() const
 	fprintf(fp, "\n");
 
 	fclose(fp);
-}
-
-void save()
-{
-	//if (frameCheck == 0) {
-	//	fp = fopen(files[activeFile], "wb");
-	//	activeFile = 1 - activeFile;
-	//}
-	//if (fp) {
-	//	int y = frameCheck % 20;
-	//	for (int x = 0; x < 320; ++x) {
-	//		Bit8u *dmdStart = vga.draw.linear_base + (320 * 3);
-	//		uint8_t val = *(dmdStart + (y * 320) + x);
-
-	//		fprintf(val == 0xFF ? On : Off, sizeof(char), 1, fp);
-	//	}
-	//	fprintf(endl, sizeof(char), 1, fp);
-	//}
-
-	//++frameCheck;
-	//if (frameCheck == 20) {
-	//	frameCheck = 0;
-	//	fclose(fp);
-	//}
-
-	//if (fp) {
-	//	int y = frameCheck % 20;
-	//	for (int x = 0; x < 320; ++x) {
-	//		Bit8u *dmdStart = vga.draw.linear_base + (320 * 3);
-	//		uint8_t val = *(dmdStart + (y * 320) + x);
-
-	//		fprintf(val == 0xFF ? On : Off, sizeof(char), 1, fp);
-	//	}
-	//	fprintf(endl, sizeof(char), 1, fp);
-	//}
-
-	//++frameCheck;
-	//if (frameCheck == 20) {
-	//	frameCheck = 0;
-	//	fclose(fp);
-	//}
 }

@@ -22,6 +22,10 @@ extern struct scrollhack {
 		} psychopinball, pinballdreams;
 	} specifichack;
 	const char *doublewidth;
+	struct {
+		bool on;
+		const char *port;
+	} dotmatrix;
 } pinhack;
   
 #endif /* __DOSBOX_PINHACK_H */
