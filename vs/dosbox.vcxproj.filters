@@ -933,12 +933,6 @@
     <ClInclude Include="..\src\pinball\pinball-serial.h">
       <Filter>src\pinball</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\TGA\tga.h">
-      <Filter>src\TGA</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\TGA\tga.hpp">
-      <Filter>src\TGA</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\pinball\pinball-menu.h">
       <Filter>src\pinball</Filter>
     </ClInclude>
@@ -1127,9 +1121,6 @@
     </Filter>
     <Filter Include="src\pinball">
       <UniqueIdentifier>{f6f22b11-0601-4ca5-9736-dd44678d22e1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\TGA">
-      <UniqueIdentifier>{58e8ec96-2923-414a-8989-c9a3a78e47a3}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\libs\pngpp">
       <UniqueIdentifier>{f957cbcb-ea5a-496c-b524-30b1410c360d}</UniqueIdentifier>

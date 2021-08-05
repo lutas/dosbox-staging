@@ -725,8 +725,6 @@
     <ClInclude Include="..\src\pinball\pinball-serial.h" />
     <ClInclude Include="..\src\platform\visualc\config.h" />
     <ClInclude Include="..\src\platform\visualc\unistd.h" />
-    <ClInclude Include="..\src\TGA\tga.h" />
-    <ClInclude Include="..\src\TGA\tga.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\src\dosbox.ico" />
