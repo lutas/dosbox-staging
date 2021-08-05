@@ -28,6 +28,7 @@
 #include "pinhacks.h"
 #include "../pinball/pinball-dm.h"
 #include "../pinball/pinball-serial.h"
+#include "../pinball/pinball-menu.h"
 
 //#undef C_DEBUG
 //#define C_DEBUG 1
@@ -42,6 +43,7 @@ static Bit8u TempLine[SCALER_MAXWIDTH * 4];
 
 static PinballDM pinballDM;
 static PinballSerial pinballSerial;
+static PinballMenu pinballMenu;
 
 static Bit8u * VGA_Draw_1BPP_Line(Bitu vidstart, Bitu line) {
 	const Bit8u *base = vga.tandy.draw_base + ((line & vga.tandy.line_mask) << vga.tandy.line_shift);
@@ -697,6 +699,7 @@ static void VGA_DrawSingleLine(Bitu /*blah*/) {
 		if (vga.draw.split_line == vga.draw.lines_done)
 			VGA_ProcessSplit();
 	}
+
 	if (vga.draw.lines_done < vga.draw.lines_total) {
 		PIC_AddEvent(VGA_DrawSingleLine,(float)vga.draw.delay.htotal);
 	} else RENDER_EndUpdate(false);
@@ -727,6 +730,9 @@ static void VGA_DrawEGASingleLine(Bitu /*blah*/) {
 
 static void VGA_DrawPart(Bitu lines)
 {
+	if (!pinhack.trigger) {
+		return;
+	}
 
 	while (lines--) {
 		Bit8u * data=VGA_DrawLine( vga.draw.address, vga.draw.address_line );
@@ -809,6 +815,31 @@ static void VGA_VertInterrupt(Bitu /*val*/) {
 			frame = 0;
 		}
 	}
+	
+	if (!pinhack.trigger) {
+
+		pinballMenu.render(vga.draw.linear_base, vga.draw.width,
+		                   vga.draw.height);
+
+		RENDER_StartUpdate();
+
+		int lines = vga.draw.height;
+		while (lines--) {
+			Bit8u *data = VGA_DrawLine(vga.draw.address,
+			                           vga.draw.address_line);
+
+			RENDER_DrawLine(data);
+
+			vga.draw.address_line++;
+			if (vga.draw.address_line >= vga.draw.address_line_total) {
+				vga.draw.address_line = 0;
+				vga.draw.address += vga.draw.address_add;
+			}
+			vga.draw.lines_done++;
+		}
+		RENDER_EndUpdate(false);
+	}
+
 
 	if ((!vga.draw.vret_triggered) && ((vga.crtc.vertical_retrace_end&0x30)==0x10)) {
 		vga.draw.vret_triggered=true;
@@ -1609,6 +1640,8 @@ void VGA_SetupDrawing(Bitu /*val*/) {
 		}
 		else
 		{
+			pinballMenu.load();
+
 			pinhack.trigger = false;
 			printf("trigger values evalueted but not triggered! Current resolution: %dx%d\n",
 			        width, height);
@@ -1695,6 +1728,7 @@ void VGA_KillDrawing(void) {
 	PIC_RemoveEvents(VGA_DrawEGASingleLine);
 	vga.draw.parts_left = 0;
 	vga.draw.lines_done = ~0;
+
 	if (!vga.draw.vga_override) RENDER_EndUpdate(true);
 }
 

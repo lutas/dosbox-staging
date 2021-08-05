@@ -487,6 +487,12 @@
     <ClCompile Include="..\src\pinball\pinball-serial.cpp">
       <Filter>src\pinball</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\pinball\pinball-menu.cpp">
+      <Filter>src\pinball</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\pinball\graphics-helper.cpp">
+      <Filter>src\pinball</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\bios.h">
@@ -927,6 +933,105 @@
     <ClInclude Include="..\src\pinball\pinball-serial.h">
       <Filter>src\pinball</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\TGA\tga.h">
+      <Filter>src\TGA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\TGA\tga.hpp">
+      <Filter>src\TGA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\pinball\pinball-menu.h">
+      <Filter>src\pinball</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\pinball\graphics-helper.h">
+      <Filter>src\pinball</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\libs\pngpp\types.hpp">
+      <Filter>src\libs\pngpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\libs\pngpp\writer.hpp">
+      <Filter>src\libs\pngpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\libs\pngpp\color.hpp">
+      <Filter>src\libs\pngpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\libs\pngpp\config.hpp">
+      <Filter>src\libs\pngpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\libs\pngpp\consumer.hpp">
+      <Filter>src\libs\pngpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\libs\pngpp\convert_color_space.hpp">
+      <Filter>src\libs\pngpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\libs\pngpp\end_info.hpp">
+      <Filter>src\libs\pngpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\libs\pngpp\error.hpp">
+      <Filter>src\libs\pngpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\libs\pngpp\ga_pixel.hpp">
+      <Filter>src\libs\pngpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\libs\pngpp\generator.hpp">
+      <Filter>src\libs\pngpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\libs\pngpp\gray_pixel.hpp">
+      <Filter>src\libs\pngpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\libs\pngpp\image.hpp">
+      <Filter>src\libs\pngpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\libs\pngpp\image_info.hpp">
+      <Filter>src\libs\pngpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\libs\pngpp\index_pixel.hpp">
+      <Filter>src\libs\pngpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\libs\pngpp\info.hpp">
+      <Filter>src\libs\pngpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\libs\pngpp\info_base.hpp">
+      <Filter>src\libs\pngpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\libs\pngpp\io_base.hpp">
+      <Filter>src\libs\pngpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\libs\pngpp\packed_pixel.hpp">
+      <Filter>src\libs\pngpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\libs\pngpp\palette.hpp">
+      <Filter>src\libs\pngpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\libs\pngpp\pixel_buffer.hpp">
+      <Filter>src\libs\pngpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\libs\pngpp\pixel_traits.hpp">
+      <Filter>src\libs\pngpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\libs\pngpp\png.hpp">
+      <Filter>src\libs\pngpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\libs\pngpp\reader.hpp">
+      <Filter>src\libs\pngpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\libs\pngpp\require_color_space.hpp">
+      <Filter>src\libs\pngpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\libs\pngpp\rgb_pixel.hpp">
+      <Filter>src\libs\pngpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\libs\pngpp\rgba_pixel.hpp">
+      <Filter>src\libs\pngpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\libs\pngpp\solid_pixel_buffer.hpp">
+      <Filter>src\libs\pngpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\libs\pngpp\streaming_base.hpp">
+      <Filter>src\libs\pngpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\libs\pngpp\tRNS.hpp">
+      <Filter>src\libs\pngpp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\src\winres.rc">
@@ -1022,6 +1127,12 @@
     </Filter>
     <Filter Include="src\pinball">
       <UniqueIdentifier>{f6f22b11-0601-4ca5-9736-dd44678d22e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\TGA">
+      <UniqueIdentifier>{58e8ec96-2923-414a-8989-c9a3a78e47a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\libs\pngpp">
+      <UniqueIdentifier>{f957cbcb-ea5a-496c-b524-30b1410c360d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
