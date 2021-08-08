@@ -1,5 +1,4 @@
 #include "pinball-menu.h"
-#include "../TGA/tga.h"
 #include "graphics-helper.h"
 
 bool PinballMenu::load()
@@ -31,5 +30,5 @@ void PinballMenu::render(Bit8u* frameBuffer, int width, int height)
 	GraphicsHelper::setPalette(_plaqueGraphic);
 	GraphicsHelper::clear(frameBuffer, width, height, 0x0);
 
-	GraphicsHelper::drawImage(frameBuffer, width, height, _plaqueGraphic, 100, 0, 119, 192);
+	GraphicsHelper::drawImage(frameBuffer, width, height, _plaqueGraphic, 100, 0);
 }

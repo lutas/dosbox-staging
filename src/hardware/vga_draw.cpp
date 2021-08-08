@@ -757,7 +757,7 @@ static void VGA_DrawPart(Bitu lines)
 			}
 		}
 	}
-	if (--vga.draw.parts_left) {
+	if (pinhack.trigger && --vga.draw.parts_left) {
 		PIC_AddEvent(VGA_DrawPart,(float)vga.draw.delay.parts,
 			 (vga.draw.parts_left!=1) ? vga.draw.parts_lines  : (vga.draw.lines_total - vga.draw.lines_done));
 	} else {
