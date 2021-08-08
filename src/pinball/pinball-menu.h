@@ -15,21 +15,30 @@ struct Table {
 
 class PinballMenu {
 public:
+	const int NumTables = 8;
+
 	inline PinballMenu() :
-		_active(true)
+		_displayMenu(false),
+		_activeTable(0)
 	{ 
 	}
 
 	bool load();
-	inline void setActive(bool active) { _active = active; }
+	inline void setActive(bool active) { _displayMenu = active; }
+	bool isActive() const { return _displayMenu; }
 
-	void update(int frameTime);
+	void update(float frameTime);
 	void render(Bit8u *frameBuffer, int width, int height);
 
 private:
 	Table _tables[8];
 	png::image<png::index_pixel> _plaqueGraphic;
-	bool _active;
+
+	void handleControls();
+	void startActiveTable();
+	bool _displayMenu;
+
+	int _activeTable;
 };
 
 #endif

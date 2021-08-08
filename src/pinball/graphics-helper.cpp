@@ -44,13 +44,12 @@ void GraphicsHelper::drawPartialImage(Bit8u *frameBuffer,
 	const int lineBytes = img.get_width() * sizeof(Bit8u);
 	const int frameBufferLineSize = frameBufferWidth * sizeof(Bit8u);
 
-	for (size_t line = imgSrc.y; line < img.get_height(); ++line) {
-		int imgOffset = line * lineBytes;
+	for (size_t line = 0; line < imgSrc.height; ++line) {
 		Bit8u *frameBufferOffset =
 		        frameBuffer +
 		        (((size_t)frameBufferLineSize * (y + line)) + x);
 
-		const std::vector<png::index_pixel> row = img.get_row(line);
+		const std::vector<png::index_pixel> row = img.get_row(line + imgSrc.y);
 		std::vector<png::index_pixel>::const_iterator iter;
 		for (iter = row.begin(); iter != row.end(); ++iter) {
 			memcpy(frameBufferOffset, (void *)(&*iter), 1);

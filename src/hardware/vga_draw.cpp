@@ -730,7 +730,7 @@ static void VGA_DrawEGASingleLine(Bitu /*blah*/) {
 
 static void VGA_DrawPart(Bitu lines)
 {
-	if (!pinhack.trigger) {
+	if (pinballMenu.isActive()) {
 		return;
 	}
 
@@ -757,7 +757,7 @@ static void VGA_DrawPart(Bitu lines)
 			}
 		}
 	}
-	if (pinhack.trigger && --vga.draw.parts_left) {
+	if (!pinballMenu.isActive() && --vga.draw.parts_left) {
 		PIC_AddEvent(VGA_DrawPart,(float)vga.draw.delay.parts,
 			 (vga.draw.parts_left!=1) ? vga.draw.parts_lines  : (vga.draw.lines_total - vga.draw.lines_done));
 	} else {
@@ -816,8 +816,9 @@ static void VGA_VertInterrupt(Bitu /*val*/) {
 		}
 	}
 	
-	if (!pinhack.trigger) {
+	if (pinballMenu.isActive()) {
 
+		pinballMenu.update(1/60.0f);
 		pinballMenu.render(vga.draw.linear_base, vga.draw.width,
 		                   vga.draw.height);
 
@@ -1637,10 +1638,16 @@ void VGA_SetupDrawing(Bitu /*val*/) {
 					pinballSerial.connect(pinhack.dotmatrix.port);
 				}
 			}
+
+			pinballMenu.setActive(false);
 		}
 		else
 		{
 			pinballMenu.load();
+			
+			if ((vga.draw.parts_lines == 50 || vga.draw.parts_lines == 133) && vga.gfx.index == 4) {
+				pinballMenu.setActive(true);
+			}
 
 			pinhack.trigger = false;
 			printf("trigger values evalueted but not triggered! Current resolution: %dx%d\n",
