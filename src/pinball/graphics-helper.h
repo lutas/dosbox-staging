@@ -13,7 +13,7 @@ struct RECT {
 	int height;
 };
 
-static class GraphicsHelper {
+class GraphicsHelper {
 public:
 	static void clear(Bit8u *frameBuffer, int width, int height, Bit8u color);
 

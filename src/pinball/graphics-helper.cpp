@@ -65,4 +65,6 @@ void GraphicsHelper::setPalette(const IndexedPNG &img)
 	for (int i = 0; i < v.size(); ++i) {
 		RENDER_SetPal(i, v[i].red, v[i].green, v[i].blue);
 	}
+
+	RENDER_SetPal(255, 0, 0, 0);
 }

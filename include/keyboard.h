@@ -138,4 +138,6 @@ enum KBD_KEYS {
 void KEYBOARD_ClrBuffer(void);
 void KEYBOARD_AddKey(KBD_KEYS keytype,bool pressed);
 
+bool KEYBOARD_IsKeyPressed(int key, bool extended);
+
 #endif

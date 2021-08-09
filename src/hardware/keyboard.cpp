@@ -42,7 +42,7 @@ static struct {
 	struct {
 		KBD_KEYS key;
 		Bitu wait;
-		Bitu pause,rate;
+		Bitu pause, rate;
 	} repeat;
 	KeyCommands command;
 	Bit8u p60data;
@@ -70,8 +70,29 @@ static void KEYBOARD_TransferBuffer(Bitu /*val*/) {
 	keyb.used--;
 }
 
+bool KEYBOARD_IsKeyPressed(int key, bool extended)
+{
+	if (keyb.buffer[keyb.pos - 1] == key) {
+		if (extended) {
+			for (int pos = keyb.pos - 5; pos < keyb.pos - 1; ++pos) {
+				if (keyb.buffer[pos] == 0xe0) {
+					return true;
+				}
+			}
+		} else {
+			return true;
+		}
+	}
+	return false;
+}
 
-void KEYBOARD_ClrBuffer(void) {
+void KEYBOARD_ClrBuffer(void)
+{
+	keyb.p60changed = false;
+	keyb.repeat.key = KBD_NONE;
+	keyb.repeat.pause = 500;
+	keyb.repeat.rate = 33;
+	keyb.repeat.wait = 0;
 	keyb.used=0;
 	keyb.pos=0;
 	PIC_RemoveEvents(KEYBOARD_TransferBuffer);

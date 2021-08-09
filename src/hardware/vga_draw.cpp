@@ -815,14 +815,16 @@ static void VGA_VertInterrupt(Bitu /*val*/) {
 			frame = 0;
 		}
 	}
-	
-	if (pinballMenu.isActive()) {
 
-		pinballMenu.update(1/60.0f);
+	if (pinballMenu.isActive()) {
+		pinballMenu.update(1 / 60.0f);
+
 		pinballMenu.render(vga.draw.linear_base, vga.draw.width,
 		                   vga.draw.height);
 
 		RENDER_StartUpdate();
+
+		vga.draw.address = 0; // don't allow any Pinball Dreams menu scrolling
 
 		int lines = vga.draw.height;
 		while (lines--) {
@@ -1642,10 +1644,10 @@ void VGA_SetupDrawing(Bitu /*val*/) {
 			pinballMenu.setActive(false);
 		}
 		else
-		{
-			pinballMenu.load();
-			
-			if ((vga.draw.parts_lines == 50 || vga.draw.parts_lines == 133) && vga.gfx.index == 4) {
+		{			
+			if ((vga.draw.parts_lines == 50 || vga.draw.parts_lines == 133) &&
+			    vga.gfx.index == 4) {
+				pinballMenu.load();
 				pinballMenu.setActive(true);
 			}
 
