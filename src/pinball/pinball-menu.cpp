@@ -87,7 +87,7 @@ void PinballMenu::update(float frameTime)
 	if (_pressKey.active) {
 		_pressKey.time -= frameTime;
 		if (_pressKey.time <= 0) {
-			_pressKey.time = MaxKeyRepeatDelay - _pressKey.time;
+			_pressKey.time = 0.5f - _pressKey.time;
 			_pressKey.flip = !_pressKey.flip;
 
 			KEYBOARD_AddKey(_pressKey.key, _pressKey.flip);
@@ -115,6 +115,7 @@ void PinballMenu::handleControls(float frameTime)
 		if (_activeTable >= NumTables) {
 			_activeTable = 0;
 		}
+		//KEYBOARD_ClrBuffer();
 	} else if (KEYBOARD_IsKeyPressed(29, false)) {
 		// left ctrl
 		_keyRepeatDelay = MaxKeyRepeatDelay;
@@ -123,8 +124,10 @@ void PinballMenu::handleControls(float frameTime)
 		if (_activeTable < 0) {
 			_activeTable = NumTables - 1;
 		}
+		//KEYBOARD_ClrBuffer();
 	}
 	if (KEYBOARD_IsKeyPressed(54, false)) {
+		KEYBOARD_ClrBuffer();
 		_activateTable = _activeTable;
 
 		KEYBOARD_AddKey(TableKeys[_activateTable], true);
