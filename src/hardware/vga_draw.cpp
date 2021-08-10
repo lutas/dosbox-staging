@@ -819,6 +819,9 @@ static void VGA_VertInterrupt(Bitu /*val*/) {
 	if (pinballMenu.isActive()) {
 		pinballMenu.update(1 / 60.0f);
 
+		if (vga.draw.resizing) {
+			return;
+		}
 		pinballMenu.render(vga.draw.linear_base, vga.draw.width,
 		                   vga.draw.height);
 
