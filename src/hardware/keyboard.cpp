@@ -74,7 +74,11 @@ bool KEYBOARD_IsKeyPressed(int key, bool extended)
 {
 	if (keyb.buffer[keyb.pos - 1] == key) {
 		if (extended) {
-			for (int pos = keyb.pos - 5; pos < keyb.pos - 1; ++pos) {
+			int start = keyb.pos - 2;
+			if (start < 0)
+				start = 0;
+
+			for (int pos = start; pos < keyb.pos - 1; ++pos) {
 				if (keyb.buffer[pos] == 0xe0) {
 					return true;
 				}
