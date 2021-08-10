@@ -137,8 +137,11 @@ void PinballMenu::render(Bit8u* frameBuffer, int width, int height)
 		return;
 	}
 
-	GraphicsHelper::setPalette(_plaqueGraphic);
-	GraphicsHelper::clear(frameBuffer, width, height, 0xff);
+	// disable palette setting when transitioning to table
+	if (_activateTable == -1) {
+		GraphicsHelper::setPalette(_plaqueGraphic);
+		GraphicsHelper::clear(frameBuffer, width, height, 0xff);
+	}
 
 	RECT tableGraphic;
 	tableGraphic.x = 0;
