@@ -1,6 +1,5 @@
 
 #include "pinball-dm.h"
-#include <vcruntime_string.h>
 #include <cassert>
 
 PinballDM::PinballDM() 

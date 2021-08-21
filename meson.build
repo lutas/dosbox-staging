@@ -321,6 +321,7 @@ subdir('src/ints')
 subdir('src/midi')
 subdir('src/misc')
 subdir('src/shell')
+subdir('src/pinball')
 
 
 # generate config.h
