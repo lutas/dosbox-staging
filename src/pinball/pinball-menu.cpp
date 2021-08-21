@@ -126,7 +126,8 @@ void PinballMenu::handleControls(float frameTime)
 		}
 		//KEYBOARD_ClrBuffer();
 	}
-	if (KEYBOARD_IsKeyPressed(54, false)) {
+	if (KEYBOARD_IsKeyPressed(57, false)) {
+		// SPACE
 		KEYBOARD_ClrBuffer();
 		_activateTable = _activeTable;
 
