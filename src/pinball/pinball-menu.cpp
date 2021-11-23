@@ -10,7 +10,7 @@ bool PinballMenu::load()
 {
 	_plaqueGraphic.read("img/plaques-indexed.png");
 	
-	
+
 	_tables[0].fullname = "Ignition";
 	_tables[0].shortName = "IGN";
 	_tables[0].tableGraphic.read("img/plaques-indexed.png");
@@ -68,20 +68,25 @@ void PinballMenu::setActive(bool active)
 		_activateTable = -1;
 		_keyRepeatDelay = 0;
 		_pressKey.active = false;
-		pPinballVars->setGameState(PinballVars::GameState::TableLoad);
+		pPinballVars->setGameState(PinballVars::GameState::PressStart);
+		KEYBOARD_ClrBuffer();
 	} else {
+		pPinballVars->setActiveTable(-1);
+
 		pPinballVars->setGameState(PinballVars::GameState::Menu);
+		KEYBOARD_ClrBuffer();
 	}
 }
 void PinballMenu::update(float frameTime)
 {
 	if (_activateTable != -1) {
+		pPinballVars->setActiveTable(_activateTable);
+
 		KEYBOARD_AddKey(TableKeys[_activateTable], false);
 		_activateTable = -1;
 		_pressKey.active = true;
 		return;
 	}
-
 	if (_displayMenu) {
 		handleControls(frameTime);
 	}
@@ -128,7 +133,11 @@ void PinballMenu::handleControls(float frameTime)
 		}
 		//KEYBOARD_ClrBuffer();
 	}
+	#if _DEBUG
+	if (KEYBOARD_IsKeyPressed(54, false)) {
+#else
 	if (KEYBOARD_IsKeyPressed(57, false)) {
+	#endif
 		// SPACE
 		KEYBOARD_ClrBuffer();
 		_activateTable = _activeTable;

@@ -9,7 +9,7 @@ public:
 	enum GameState {
 		Startup,
 		Menu,
-		TableLoad,
+		PressStart,
 		LaunchBall,
 		BallInPlay,
 		LifeLost
@@ -21,7 +21,12 @@ public:
 	uint16_t getBallX() const;
 	uint16_t getBallY() const;
 	long getScore() const;
-	
+	bool inPlay() const;
+
+	// -1 = no table
+	int getActiveTable() const;
+	void setActiveTable(int table);
+
 	GameState getGameState() const { return _activeGameState; }
 	void setGameState(const GameState &state);
 
@@ -31,6 +36,10 @@ private:
 	GameState deduceState() const;
 
 	GameState _activeGameState;
+
+	int _activeTable;
+	int _tableMemoryOffset;
+
 };
 
 #endif

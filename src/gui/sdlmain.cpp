@@ -444,6 +444,11 @@ void GFX_SetTitle(Bit32s cycles, int /*frameskip*/, bool paused)
 	SDL_SetWindowTitle(sdl.window, title);
 }
 
+void GFX_SetTitle(const char* title)
+{
+	SDL_SetWindowTitle(sdl.window, title);
+}
+
 /* This function is SDL_EventFilter which is being called when event is
  * pushed into the SDL event queue.
  *
