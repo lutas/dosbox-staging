@@ -2,11 +2,11 @@
 
 #include "mem.h"
 
-PinballVars::PinballVars() : _activeGameState(PinballState::Startup)
+PinballVars::PinballVars() : _activeGameState(GameState::Startup)
 {
 }
 
-void PinballVars::setGameState(const PinballState &state)
+void PinballVars::setGameState(const GameState &state)
 {
 	if (state != _activeGameState) {
 		_activeGameState = state;
@@ -33,13 +33,13 @@ uint16_t PinballVars::getBallY() const
 	return *_pBallY;
 }
 
-PinballState PinballVars::deduceState() const
+PinballVars::GameState PinballVars::deduceState() const
 {
 	uint8_t lives = getPlayerLives();
 
 	// deduce in game state
 	if (lives == 0 || lives > 10) {
-		return PinballState::TableLoad;
+		return GameState::TableLoad;
 	}
 
 	// we have lives, we must be playing
@@ -48,22 +48,22 @@ PinballState PinballVars::deduceState() const
 
 	// if ball is in tube, we're waiting for launch
 	if (x > 36 && x < 39 && y > 56) {
-		return PinballState::LaunchBall;
+		return GameState::LaunchBall;
 	}
 
 	// if it's offscreen, we've lost a life
 	if (y > 70) {
-		return PinballState::LifeLost;
+		return GameState::LifeLost;
 	}
 
 	// otherwise the ball is active
-	return PinballState::BallInPlay;
+	return GameState::BallInPlay;
 }
 
 
 void PinballVars::update(float frameTime)
 {
-	if (_activeGameState == PinballState::Startup || _activeGameState == PinballState::Menu) {
+	if (_activeGameState == GameState::Startup || _activeGameState == GameState::Menu) {
 		return;
 	}
 
