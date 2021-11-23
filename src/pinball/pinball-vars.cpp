@@ -2,7 +2,9 @@
 
 #include "mem.h"
 
+#if _DEBUG
 extern void GFX_SetTitle(const char* title);
+#endif
 
 namespace MemOffset {
 
