@@ -808,7 +808,8 @@ static void INLINE VGA_ChangesStart( void ) {
 }
 #endif
 
-static int frame = -1;
+// start a few frames early to prevent crash when rescaling window
+static int frame = -15;
 static void VGA_VertInterrupt(Bitu /*val*/) {
 	if (pinhack.dotmatrix.on) {
 		pinballDM.updateData(vga.draw.linear_base);
@@ -829,8 +830,8 @@ static void VGA_VertInterrupt(Bitu /*val*/) {
 			return;
 		}
 
-		if (frame == -1) {
-			frame = 0;
+		if (frame < 0) {
+			frame++;
 			return;
 		}
 		pinballMenu.render(vga.draw.linear_base, vga.draw.width,

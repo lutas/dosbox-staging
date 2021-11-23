@@ -92,6 +92,7 @@ bool KEYBOARD_IsKeyPressed(int key, bool extended)
 
 void KEYBOARD_ClrBuffer(void)
 {
+	memset(keyb.buffer, 0, sizeof(Bit8u) * 32);
 	keyb.p60changed = false;
 	keyb.repeat.key = KBD_NONE;
 	keyb.repeat.pause = 500;
