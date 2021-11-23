@@ -1,0 +1,7 @@
+State,L,R,SPACE,Start,Quit,Plunger
+Startup,,,x,,,
+Menu,x,x,x,,,
+Press Start,,,,x,x,
+Launch ball,,,,,x,x
+Ball in play,x,x,,,x,
+Life lost,,,,,,
