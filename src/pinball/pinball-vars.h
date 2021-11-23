@@ -20,6 +20,7 @@ public:
 	uint8_t getPlayerLives() const;
 	uint16_t getBallX() const;
 	uint16_t getBallY() const;
+	long getScore() const;
 	
 	GameState getGameState() const { return _activeGameState; }
 	void setGameState(const GameState &state);
