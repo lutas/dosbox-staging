@@ -68,9 +68,11 @@ void PinballMenu::setActive(bool active)
 		_activateTable = -1;
 		_keyRepeatDelay = 0;
 		_pressKey.active = false;
+		pPinballVars->setState(PinballState::TableLoad);
+	} else {
+		pPinballVars->setState(PinballState::Menu);
 	}
 }
-
 void PinballMenu::update(float frameTime)
 {
 	if (_activateTable != -1) {

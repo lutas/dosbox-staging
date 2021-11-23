@@ -538,6 +538,7 @@
     <ClCompile Include="..\src\pinball\pinball-dm.cpp" />
     <ClCompile Include="..\src\pinball\pinball-menu.cpp" />
     <ClCompile Include="..\src\pinball\pinball-serial.cpp" />
+    <ClCompile Include="..\src\pinball\pinball-vars.cpp" />
     <ClCompile Include="..\src\shell\shell.cpp" />
     <ClCompile Include="..\src\shell\shell_batch.cpp" />
     <ClCompile Include="..\src\shell\shell_cmds.cpp" />
@@ -723,6 +724,7 @@
     <ClInclude Include="..\src\pinball\pinball-dm.h" />
     <ClInclude Include="..\src\pinball\pinball-menu.h" />
     <ClInclude Include="..\src\pinball\pinball-serial.h" />
+    <ClInclude Include="..\src\pinball\pinball-vars.h" />
     <ClInclude Include="..\src\platform\visualc\config.h" />
     <ClInclude Include="..\src\platform\visualc\unistd.h" />
   </ItemGroup>

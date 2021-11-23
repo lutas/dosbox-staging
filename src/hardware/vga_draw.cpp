@@ -28,6 +28,7 @@
 #include "pinhacks.h"
 #include "../pinball/pinball-dm.h"
 #include "../pinball/pinball-serial.h"
+#include "../pinball/pinball-vars.h"
 #include "../pinball/pinball-menu.h"
 
 //#undef C_DEBUG
@@ -43,7 +44,8 @@ static Bit8u TempLine[SCALER_MAXWIDTH * 4];
 
 static PinballDM pinballDM;
 static PinballSerial pinballSerial;
-static PinballMenu pinballMenu;
+static PinballVars pinballVars;
+static PinballMenu pinballMenu(pinballVars);
 
 static Bit8u * VGA_Draw_1BPP_Line(Bitu vidstart, Bitu line) {
 	const Bit8u *base = vga.tandy.draw_base + ((line & vga.tandy.line_mask) << vga.tandy.line_shift);
@@ -732,7 +734,7 @@ static void VGA_DrawPart(Bitu lines)
 {
 	if (pinballMenu.isActive()) {
 		return;
-	}
+	}	
 
 	while (lines--) {
 		Bit8u * data=VGA_DrawLine( vga.draw.address, vga.draw.address_line );
@@ -806,7 +808,7 @@ static void INLINE VGA_ChangesStart( void ) {
 }
 #endif
 
-static int frame = 0;
+static int frame = -1;
 static void VGA_VertInterrupt(Bitu /*val*/) {
 	if (pinhack.dotmatrix.on) {
 		pinballDM.updateData(vga.draw.linear_base);
@@ -816,10 +818,19 @@ static void VGA_VertInterrupt(Bitu /*val*/) {
 		}
 	}
 
+	const float frameTime = 1 / 60.0f;
+
+	pinballVars.update(frameTime);
+	pinballMenu.update(frameTime);
 	if (pinballMenu.isActive()) {
-		pinballMenu.update(1 / 60.0f);
+
 
 		if (vga.draw.resizing) {
+			return;
+		}
+
+		if (frame == -1) {
+			frame = 0;
 			return;
 		}
 		pinballMenu.render(vga.draw.linear_base, vga.draw.width,

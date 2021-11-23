@@ -56,3 +56,13 @@ suppress_base.json
 .clangd
 .cache
 compile_commands.json
+
+
+*.log
+*.pdb
+*.tlog
+*.lib
+*.exp
+*.obj
+vs/x64
+src/libs/zmbv

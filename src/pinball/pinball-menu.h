@@ -4,6 +4,8 @@
 
 #include <types.h>
 #include <keyboard.h>
+
+#include "pinball-vars.h"
 #include "../libs/pngpp/png.hpp"
 
 struct Table {
@@ -26,7 +28,8 @@ public:
 	const int NumTables = 8;
 	const float MaxKeyRepeatDelay = 0.2f;
 
-	inline PinballMenu() :
+	inline PinballMenu(PinballVars& vars) :
+		pPinballVars(&vars),
 		_displayMenu(false),
 		_activeTable(0),
 		_keyRepeatDelay(0),
@@ -48,6 +51,8 @@ public:
 private:
 	Table _tables[8];
 	png::image<png::index_pixel> _plaqueGraphic;
+
+	PinballVars *pPinballVars;
 
 	void handleControls(float frameTime);
 	bool _displayMenu;
