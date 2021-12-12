@@ -324,7 +324,7 @@ bool SERIAL_open(const char* portname, COMPORT* port) {
 	termInfo.c_cflag = CS8 | CREAD | CLOCAL; // noparity, 1 stopbit
 	termInfo.c_iflag = PARMRK | INPCK;
 	termInfo.c_oflag = 0;
-	termInfo.c_lflag = 0;
+	termInfo.c_lflag = ~ICANON;
 	termInfo.c_cc[VMIN] = 0;
 	termInfo.c_cc[VTIME] = 0;
 
