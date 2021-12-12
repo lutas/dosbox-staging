@@ -21,7 +21,7 @@ bool PinballSerial::connect(const char *port)
 
 		return false;
 	}
-	if (!SERIAL_setCommParameters(_comport, 9600, 'n', 1, 8)) {
+	if (!SERIAL_setCommParameters(_comport, 115200, 'n', 1, 8)) {
 		return false;
 	}
 	_connected = true;
