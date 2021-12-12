@@ -9,10 +9,11 @@ public:
 	PinballSerial();
 	virtual ~PinballSerial();
 
-	bool connect(const char* port);
+	bool connect(const char *port);
 	bool isConnected() const;
 
 	void sendDMBuffer(const PinballDM &dm);
+	void setLight(uint16_t light, bool on);
 
 private:
 	void disconnect();

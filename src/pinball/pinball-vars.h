@@ -3,6 +3,7 @@
 #define DOSBOX_PINBALL_VARS_H
 
 #include <types.h>
+#include "pinball-serial.h"
 
 class PinballVars {
 public:
@@ -15,7 +16,16 @@ public:
 		LifeLost
 	};
 
-	PinballVars();
+	enum LightId {
+		LeftBumper = 0,
+		RightBumper = 1,
+		Space = 2,
+		Start = 3,
+		Escape = 4,
+		Launch = 5
+	};
+
+	PinballVars(PinballSerial& pinballLights);
 
 	uint8_t getPlayerLives() const;
 	uint16_t getBallX() const;
@@ -36,6 +46,8 @@ private:
 	GameState deduceState() const;
 
 	GameState _activeGameState;
+
+	PinballSerial *_pPinballLights;
 
 	int _activeTable;
 	int _tableMemoryOffset;

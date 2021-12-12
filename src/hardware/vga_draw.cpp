@@ -44,7 +44,8 @@ static Bit8u TempLine[SCALER_MAXWIDTH * 4];
 
 static PinballDM pinballDM;
 static PinballSerial pinballSerial;
-static PinballVars pinballVars;
+static PinballSerial pinballLights;
+static PinballVars pinballVars(pinballLights);
 static PinballMenu pinballMenu(pinballVars);
 
 static Bit8u * VGA_Draw_1BPP_Line(Bitu vidstart, Bitu line) {
@@ -823,8 +824,8 @@ static void VGA_VertInterrupt(Bitu /*val*/) {
 
 	pinballVars.update(frameTime);
 	pinballMenu.update(frameTime);
-	if (pinballMenu.isActive()) {
 
+	if (pinballMenu.isActive()) {
 
 		if (vga.draw.resizing) {
 			return;
@@ -1622,8 +1623,11 @@ void VGA_SetupDrawing(Bitu /*val*/) {
 			height/=2;
 		}
 	}
-	if (pinhack.enabled)
-	{                             // Enabled in config?
+	if (pinhack.enabled) {
+		if (!pinballLights.isConnected()) {
+			pinballLights.connect("COM5");
+
+		}                    // Enabled in config?
 		printf("PINHACK: "); // Check for tirggering preconditions...
 		if ((!pinhack.specifichack.pinballdreams.enabled ||
 		      pinhack.specifichack.pinballdreams.trigger) &&

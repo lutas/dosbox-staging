@@ -1,6 +1,7 @@
 #include "pinball-serial.h"
 
-PinballSerial::PinballSerial() :
+PinballSerial::PinballSerial()
+        :
 	_comport(NULL),
 	_connected(false)
 {}
@@ -20,7 +21,7 @@ bool PinballSerial::connect(const char *port)
 
 		return false;
 	}
-	if (!SERIAL_setCommParameters(_comport, 9600, 0, 1, 8)) {
+	if (!SERIAL_setCommParameters(_comport, 9600, 'n', 1, 8)) {
 		return false;
 	}
 	_connected = true;
@@ -32,8 +33,8 @@ void PinballSerial::disconnect()
 	if (_comport) {
 		SERIAL_close(_comport);
 		_comport = NULL;
-		_connected = false;
 	}
+	_connected = false;
 }
 
 bool PinballSerial::isConnected() const
@@ -52,4 +53,18 @@ void PinballSerial::sendDMBuffer(const PinballDM &dm)
 		uint16_t val = dm.getCharacterForTransport(i);
 		SERIAL_senddata(_comport, (void*)val, sizeof(val));
 	}
+}
+
+void PinballSerial::setLight(uint16_t light, bool on)
+{
+	if (!_connected) {
+		return;
+	}
+
+	if (!on) {
+		light += 6;
+	}
+
+	SERIAL_senddata(_comport, (void *)&light, sizeof(light));
+
 }

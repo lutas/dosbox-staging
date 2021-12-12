@@ -22,7 +22,9 @@ namespace MemOffset {
 	const int InPlay = Lives - 2527;
 }
 
-PinballVars::PinballVars() : 
+PinballVars::PinballVars(PinballSerial &pinballLights)
+        : 
+	_pPinballLights(&pinballLights),
 	_activeGameState(GameState::Startup),
 	_activeTable(0),
 	_tableMemoryOffset(0)
@@ -50,6 +52,59 @@ void PinballVars::setGameState(const GameState &state)
 		_activeGameState = state;
 
 		// notify something
+		switch (state) {
+		case GameState::BallInPlay: {
+			_pPinballLights->setLight(LightId::LeftBumper, true);
+			_pPinballLights->setLight(LightId::RightBumper, true);
+			_pPinballLights->setLight(LightId::Space, false);
+			_pPinballLights->setLight(LightId::Start, false);
+			_pPinballLights->setLight(LightId::Escape, true);
+			_pPinballLights->setLight(LightId::Launch, false);
+		} 
+		break;
+		case GameState::LaunchBall: {
+			_pPinballLights->setLight(LightId::LeftBumper, false);
+			_pPinballLights->setLight(LightId::RightBumper, false);
+			_pPinballLights->setLight(LightId::Space, false);
+			_pPinballLights->setLight(LightId::Start, false);
+			_pPinballLights->setLight(LightId::Escape, true);
+			_pPinballLights->setLight(LightId::Launch, true);
+		} break;
+		case GameState::LifeLost: {
+			_pPinballLights->setLight(LightId::LeftBumper, false);
+			_pPinballLights->setLight(LightId::RightBumper, false);
+			_pPinballLights->setLight(LightId::Space, false);
+			_pPinballLights->setLight(LightId::Start, false);
+			_pPinballLights->setLight(LightId::Escape, false);
+			_pPinballLights->setLight(LightId::Launch, false);
+		} break;
+		case GameState::Menu: {
+			_pPinballLights->setLight(LightId::LeftBumper, true);
+			_pPinballLights->setLight(LightId::RightBumper, true);
+			_pPinballLights->setLight(LightId::Space, true);
+			_pPinballLights->setLight(LightId::Start, false);
+			_pPinballLights->setLight(LightId::Escape, false);
+			_pPinballLights->setLight(LightId::Launch, false);
+		} break;
+		case GameState::Startup: {
+			_pPinballLights->setLight(LightId::LeftBumper, false);
+			_pPinballLights->setLight(LightId::RightBumper, false);
+			_pPinballLights->setLight(LightId::Space, true);
+			_pPinballLights->setLight(LightId::Start, false);
+			_pPinballLights->setLight(LightId::Escape, false);
+			_pPinballLights->setLight(LightId::Launch, false);
+		} break;
+		case GameState::PressStart: {
+			_pPinballLights->setLight(LightId::LeftBumper, false);
+			_pPinballLights->setLight(LightId::RightBumper, false);
+			_pPinballLights->setLight(LightId::Space, false);
+			_pPinballLights->setLight(LightId::Start, true);
+			_pPinballLights->setLight(LightId::Escape, true);
+			_pPinballLights->setLight(LightId::Launch, false);
+		} break;
+		}
+
+
 #if _DEBUG
 		switch (_activeGameState) {
 		case GameState::BallInPlay: GFX_SetTitle("Ball in play"); break;
