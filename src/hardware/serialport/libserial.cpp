@@ -324,9 +324,9 @@ bool SERIAL_open(const char* portname, COMPORT* port) {
 	termInfo.c_cflag = CS8 | CREAD | CLOCAL; // noparity, 1 stopbit
 	termInfo.c_iflag = PARMRK | INPCK;
 	termInfo.c_oflag = 0;
-	termInfo.c_lflag = ~ICANON;
-	termInfo.c_cc[VMIN] = 0;
-	termInfo.c_cc[VTIME] = 0;
+	termInfo.c_lflag = ~(ICANON | ECHO | ECHOE | ISIG);
+	termInfo.c_cc[VMIN] = 1;
+	termInfo.c_cc[VTIME] = 1;
 
 	tcflush (cp->porthandle, TCIFLUSH);
 	tcsetattr (cp->porthandle, TCSANOW, &termInfo);
