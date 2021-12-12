@@ -26,6 +26,10 @@ extern struct scrollhack {
 		bool on;
 		const char *port;
 	} dotmatrix;
+	struct {
+		bool on;
+		const char *port;
+	} buttonlights;
 } pinhack;
   
 #endif /* __DOSBOX_PINHACK_H */

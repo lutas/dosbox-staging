@@ -1624,9 +1624,8 @@ void VGA_SetupDrawing(Bitu /*val*/) {
 		}
 	}
 	if (pinhack.enabled) {
-		if (!pinballLights.isConnected()) {
-			pinballLights.connect("COM5");
-
+		if (pinhack.buttonlights.on && !pinballLights.isConnected()) {
+			pinballLights.connect(pinhack.buttonlights.port);
 		}                    // Enabled in config?
 		printf("PINHACK: "); // Check for tirggering preconditions...
 		if ((!pinhack.specifichack.pinballdreams.enabled ||

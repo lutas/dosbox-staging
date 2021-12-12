@@ -215,6 +215,8 @@ static void PINHACK_Init(Section *sec)
 		pinhack.triggerwidth.max = 9999;
 	pinhack.dotmatrix.on = section->Get_bool("pinhackdotmatrixenable");
 	pinhack.dotmatrix.port = section->Get_string("pinhackdotmatrixport");
+	pinhack.buttonlights.on = section->Get_bool("pinhackbuttonlightsenable");
+	pinhack.buttonlights.port = section->Get_string("pinhackbuttonlightsport");
 
 	printf("PINHACK: Your DOSBox has been hacked with pinball hacks V %d ",
 	       PINHACKVERSION);
@@ -540,6 +542,12 @@ void DOSBOX_Init(void) {
 	                              Property::Changeable::Always, "");
 	Pstring->Set_help("Port to send dotmatrix data over serial");
 
+	Pbool = secprop->Add_bool("pinhackbuttonlightsenable", Property::Changeable::Always, false);
+	Pbool->Set_help("Boolean: Used to turn on/off button lights to match Pinball Dreams game state");
+
+	Pstring = secprop->Add_string("pinhackbuttonlightsport",
+	                              Property::Changeable::Always, "");
+	Pstring->Set_help("Port to send button light data over serial");
 	// PINHACK: end config file section
 		
 
