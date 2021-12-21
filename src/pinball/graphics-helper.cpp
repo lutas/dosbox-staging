@@ -118,4 +118,6 @@ void GraphicsHelper::setPalette(const IndexedPNG &img)
 	}
 
 	RENDER_SetPal(255, 0, 0, 0);
+	RENDER_StartUpdate();
+	RENDER_EndUpdate(false);
 }

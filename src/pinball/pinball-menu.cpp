@@ -242,7 +242,7 @@ void PinballMenu::renderTableSelection(FrameBuffer &fb)
 	plaqueOffset.y = _tables[_activeTable].plaqueGraphicOffset;
 	plaqueOffset.width = 119;
 	plaqueOffset.height = 24;
-	GraphicsHelper::drawPartialImage(fb, _menuGraphic, 100, 20, plaqueOffset);
+	GraphicsHelper::drawPartialImage(fb, _menuGraphic, 100, 24, plaqueOffset);
 
 	const int SPACING = 20;
 	int prevTable = _activeTable - 1;
@@ -268,7 +268,7 @@ void PinballMenu::renderTableSelection(FrameBuffer &fb)
 	GraphicsHelper::drawPartialImage(fb, _menuGraphic, 100 + 119 + SPACING,
 	                                 10, plaqueOffset);
 
-	renderOutline(fb, RECT(100 - 4, 20 - 4, 120 + 8, 24 + 8));
+	renderOutline(fb, RECT(100 - 4, 24 - 4, 120 + 8, 24 + 8));
 }
 
 void PinballMenu::renderHiscores(FrameBuffer &fb)
