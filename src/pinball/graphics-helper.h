@@ -11,23 +11,36 @@ struct RECT {
 	int y;
 	int width;
 	int height;
+
+	RECT(){};
+	RECT(int x, int y, int w, int h)
+		: x(x), y(y), width(w), height(h){};
+};
+
+struct FrameBuffer {
+	Bit8u *buffer;
+	int width;
+	int height;
 };
 
 class GraphicsHelper {
 public:
-	static void clear(Bit8u *frameBuffer, int width, int height, Bit8u color);
+	static void clear(FrameBuffer &frameBuffer, Bit8u color);
 
 	static void setPalette(const IndexedPNG &png);
-	static void drawImage(Bit8u *frameBuffer, int frameBufferWidth, int frameBufferHeight, const IndexedPNG& img, int x, int y);
+	static void drawImage(FrameBuffer& frameBuffer, const IndexedPNG& img, int x, int y);
 
-	static void drawPartialImage(Bit8u *frameBuffer,
-	                             int frameBufferWidth,
-	                             int frameBufferHeight,
+	static void drawPartialImage(FrameBuffer &frameBuffer,
+	                             const IndexedPNG &img,
+	                             int x,
+	                             int y,
+	                             RECT imgSrc);
+
+	static void drawPartialImageDither(FrameBuffer& frameBuffer,
 	                             const IndexedPNG &img,
 	                             int x,
 	                             int y,
 	                             RECT imgSrc);
 };
-
 
 #endif

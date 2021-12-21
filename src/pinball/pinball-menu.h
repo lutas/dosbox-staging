@@ -7,13 +7,13 @@
 
 #include "pinball-vars.h"
 #include "../libs/pngpp/png.hpp"
+#include "graphics-helper.h"
 
 struct Table {
 	const char *fullname;
 	const char *shortName;
 
 	int plaqueGraphicOffset;
-	png::image<png::index_pixel> tableGraphic;
 };
 
 struct PressKey {
@@ -48,13 +48,22 @@ public:
 	void update(float frameTime);
 	void render(Bit8u *frameBuffer, int width, int height);
 
+protected:
+	void getCharOffset(char c, int &x, int &y);
+	void renderText(FrameBuffer &frameBuffer, const char *szText, int x, int y);
+	void renderOutline(FrameBuffer &frameBuffer, RECT outline);
+
+	void renderTableSelection(FrameBuffer &frameBuffer);
+	void renderHiscores(FrameBuffer &frameBuffer);
+
 private:
 	Table _tables[8];
-	png::image<png::index_pixel> _plaqueGraphic;
+	png::image<png::index_pixel> _menuGraphic;
 
 	PinballVars *pPinballVars;
 
 	void handleControls(float frameTime);
+
 	bool _displayMenu;
 
 	int _activeTable;
