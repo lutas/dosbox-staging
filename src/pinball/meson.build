@@ -57,7 +57,8 @@ libcpu_sources = files([
   'pinball-dm.cpp',
   'pinball-menu.cpp',
   'pinball-serial.cpp',
-  'pinball-vars.cpp'
+  'pinball-vars.cpp',
+  'pinball-hiscore.cpp'
 ])
 
 libcpu = static_library('cpu', libcpu_sources,

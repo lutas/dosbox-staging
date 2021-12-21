@@ -536,6 +536,7 @@
     <ClCompile Include="..\src\misc\support.cpp" />
     <ClCompile Include="..\src\pinball\graphics-helper.cpp" />
     <ClCompile Include="..\src\pinball\pinball-dm.cpp" />
+    <ClCompile Include="..\src\pinball\pinball-hiscore.cpp" />
     <ClCompile Include="..\src\pinball\pinball-menu.cpp" />
     <ClCompile Include="..\src\pinball\pinball-serial.cpp" />
     <ClCompile Include="..\src\pinball\pinball-vars.cpp" />
@@ -722,6 +723,7 @@
     <ClInclude Include="..\src\midi\midi_win32.h" />
     <ClInclude Include="..\src\pinball\graphics-helper.h" />
     <ClInclude Include="..\src\pinball\pinball-dm.h" />
+    <ClInclude Include="..\src\pinball\pinball-hiscore.h" />
     <ClInclude Include="..\src\pinball\pinball-menu.h" />
     <ClInclude Include="..\src\pinball\pinball-serial.h" />
     <ClInclude Include="..\src\pinball\pinball-vars.h" />

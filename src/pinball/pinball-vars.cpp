@@ -85,6 +85,10 @@ void PinballVars::setGameState(const GameState &state)
 			_pPinballLights->setLight(LightId::Start, false);
 			_pPinballLights->setLight(LightId::Escape, false);
 			_pPinballLights->setLight(LightId::Launch, false);
+
+			_hiscore.LoadHiscoreFiles(
+			        "..\\DELUXE\\HISCORES.PD1",
+			        "..\\DELUXE\\HISCORES.PD2");
 		} break;
 		case GameState::Startup: {
 			_pPinballLights->setLight(LightId::LeftBumper, false);
@@ -211,6 +215,10 @@ PinballVars::GameState PinballVars::deduceState() const
 	return GameState::BallInPlay;
 }
 
+PinballHiscore::Table PinballVars::getHiscoreTable(int table)
+{
+	return _hiscore.getTable(table);
+}
 
 void PinballVars::update(float frameTime)
 {

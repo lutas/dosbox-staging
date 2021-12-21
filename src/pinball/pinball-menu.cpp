@@ -273,19 +273,20 @@ void PinballMenu::renderTableSelection(FrameBuffer &fb)
 
 void PinballMenu::renderHiscores(FrameBuffer &fb)
 {
-	renderText(fb, "HISCORES", 160 - 32, 75);
-	renderText(fb, "PHI", 82, 100);
-	renderText(fb, "123456789000", 140, 100);
-	renderText(fb, "ABI", 82, 115);
-	renderText(fb, "12345678900", 148, 115);
-	renderText(fb, "ADA", 82, 130);
-	renderText(fb, "1234567890", 156, 130);
-	renderText(fb, "MIA", 82, 145);
-	renderText(fb, "123456789", 164, 145);
-	renderText(fb, "ABC", 82, 160);
-	renderText(fb, "100000000", 164, 160);
+	PinballHiscore::Table hi = pPinballVars->getHiscoreTable(_activeTable);
 
-	renderOutline(fb, RECT(100 - 32, 70, 120 + 64, 112));
+	renderText(fb, "HISCORES", 160 - 32, 75);
+
+	for (int score = 0; score < 4; ++score) {
+		renderText(fb, hi.scores[score].name, 82, 100 + (score * 15));
+		char scoreBuf[13] = {0};
+		itoa(hi.scores[score].score, scoreBuf, 10);
+
+		int rightAlignPx = (12 - strlen(scoreBuf)) * CharPxSize;
+		renderText(fb, scoreBuf, 132 + rightAlignPx, 100 + (score * 15));
+	}
+
+	renderOutline(fb, RECT(100 - 32, 70, 120 + 56, 112));
 }
 
 void PinballMenu::render(Bit8u* frameBuffer, int width, int height)

@@ -4,6 +4,7 @@
 
 #include <types.h>
 #include "pinball-serial.h"
+#include "pinball-hiscore.h"
 
 class PinballVars {
 public:
@@ -40,6 +41,8 @@ public:
 	GameState getGameState() const { return _activeGameState; }
 	void setGameState(const GameState &state);
 
+	PinballHiscore::Table getHiscoreTable(int table);
+
 	void update(float frameTime);
 
 private:
@@ -48,6 +51,7 @@ private:
 	GameState _activeGameState;
 
 	PinballSerial *_pPinballLights;
+	PinballHiscore _hiscore;
 
 	int _activeTable;
 	int _tableMemoryOffset;

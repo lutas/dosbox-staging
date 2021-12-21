@@ -496,6 +496,9 @@
     <ClCompile Include="..\src\pinball\pinball-vars.cpp">
       <Filter>src\pinball</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\pinball\pinball-hiscore.cpp">
+      <Filter>src\pinball</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\bios.h">
@@ -1030,6 +1033,9 @@
       <Filter>src\libs\pngpp</Filter>
     </ClInclude>
     <ClInclude Include="..\src\pinball\pinball-vars.h">
+      <Filter>src\pinball</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\pinball\pinball-hiscore.h">
       <Filter>src\pinball</Filter>
     </ClInclude>
   </ItemGroup>
