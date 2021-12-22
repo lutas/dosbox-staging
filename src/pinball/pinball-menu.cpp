@@ -305,6 +305,6 @@ void PinballMenu::render(Bit8u* frameBuffer, int width, int height)
 		GraphicsHelper::setPalette(_menuGraphic);
 		GraphicsHelper::clear(fb, 0xff);
 		renderTableSelection(fb);
-		//renderHiscores(fb);
+		renderHiscores(fb);
 	}
 }
