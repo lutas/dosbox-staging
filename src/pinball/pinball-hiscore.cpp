@@ -3,6 +3,8 @@
 #include <fstream>
 #include <iostream>
 
+#include <string.h>
+
 PinballHiscore::PinballHiscore() 
 {}
 

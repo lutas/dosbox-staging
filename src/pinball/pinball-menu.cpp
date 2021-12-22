@@ -1,4 +1,6 @@
 #include "pinball-menu.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 namespace {
 	const KBD_KEYS TableKeys[] = {KBD_f1, KBD_f2, KBD_f3, KBD_f4,
@@ -280,8 +282,7 @@ void PinballMenu::renderHiscores(FrameBuffer &fb)
 	for (int score = 0; score < 4; ++score) {
 		renderText(fb, hi.scores[score].name, 82, 100 + (score * 15));
 		char scoreBuf[13] = {0};
-		itoa(hi.scores[score].score, scoreBuf, 10);
-
+		snprintf(scoreBuf, sizeof(scoreBuf), "%d", hi.scores[score].score);
 		int rightAlignPx = (12 - strlen(scoreBuf)) * CharPxSize;
 		renderText(fb, scoreBuf, 132 + rightAlignPx, 100 + (score * 15));
 	}
