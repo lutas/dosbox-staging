@@ -87,8 +87,8 @@ void PinballVars::setGameState(const GameState &state)
 			_pPinballLights->setLight(LightId::Launch, false);
 
 			_hiscore.LoadHiscoreFiles(
-			        "..\\DELUXE\\HISCORES.PD1",
-			        "..\\DELUXE\\HISCORES.PD2");
+			        "../DELUXE/HISCORES.PD1",
+			        "../DELUXE/HISCORES.PD2");
 		} break;
 		case GameState::Startup: {
 			_pPinballLights->setLight(LightId::LeftBumper, false);
