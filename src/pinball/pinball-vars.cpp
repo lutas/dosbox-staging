@@ -1,6 +1,8 @@
 #include "pinball-vars.h"
 
 #include "mem.h"
+#include <types.h>
+#include <keyboard.h>
 
 #if _DEBUG
 extern void GFX_SetTitle(const char* title);
@@ -27,7 +29,8 @@ PinballVars::PinballVars(PinballSerial &pinballLights)
 	_pPinballLights(&pinballLights),
 	_activeGameState(GameState::Startup),
 	_activeTable(0),
-	_tableMemoryOffset(0)
+	_tableMemoryOffset(0),
+    _quitGameActive(QuitState::Playing)
 {
 }
 
@@ -222,10 +225,71 @@ PinballHiscore::Table PinballVars::getHiscoreTable(int table)
 
 void PinballVars::update(float frameTime)
 {
-	if (_activeGameState == GameState::Startup || _activeGameState == GameState::Menu) {
+	if (_activeGameState == GameState::Startup ||
+	    _activeGameState == GameState::Menu) {
 		return;
+	}
+
+	_quitGameTimer -= frameTime;
+	if (_quitGameTimer < 0) {
+		_quitGameTimer = 0;
 	}
 
 	setGameState(deduceState());
 
+	// monitor for quit game being pressed
+	switch (_quitGameActive) {
+	case QuitState::QuitPressed:
+		if (_quitGameTimer <= 0) {
+			// n = 49, y = 21
+			if (KEYBOARD_IsKeyPressed(1, false)) {
+				KEYBOARD_ClrBuffer();
+				KEYBOARD_AddKey(KBD_n, true);
+
+				_quitGameActive = QuitState::QuitCancelled;
+				_quitGameTimer = 0.2f;
+			} else if (KEYBOARD_IsKeyPressed(54, false)) {
+				KEYBOARD_ClrBuffer();
+				KEYBOARD_AddKey(KBD_y, true);
+
+				_quitGameActive = QuitState::QuitConfirmed;
+				_quitGameTimer = 0.2f;
+			}
+		} else {
+			KEYBOARD_AddKey(KBD_esc, false);
+
+		}
+		break;
+
+	case QuitState::Playing:
+		if (KEYBOARD_IsKeyPressed(1, false)) {
+
+			KEYBOARD_ClrBuffer();
+			KEYBOARD_AddKey(KBD_esc, true);
+
+			_quitGameActive = QuitState::QuitPressed;
+			_quitGameTimer = 0.2f;
+		}
+		break;
+
+	case QuitState::QuitCancelled:
+		_quitGameTimer -= frameTime;
+		if (_quitGameTimer <= 0) {
+			KEYBOARD_AddKey(KBD_n, false);
+			
+			_quitGameActive = QuitState::Playing;
+			_quitGameTimer = 0.2f;
+		}
+		break;
+
+	case QuitState::QuitConfirmed:
+		_quitGameTimer -= frameTime;
+		if (_quitGameTimer <= 0) {
+			KEYBOARD_AddKey(KBD_y, false);
+
+			_quitGameActive = QuitState::Playing;
+			_quitGameTimer = 0.2f;
+		}
+		break;
+	}
 }

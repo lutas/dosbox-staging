@@ -26,6 +26,13 @@ public:
 		Launch = 5
 	};
 
+	enum QuitState {
+		Playing,
+		QuitPressed,
+		QuitConfirmed,
+		QuitCancelled
+	};
+
 	PinballVars(PinballSerial& pinballLights);
 
 	uint8_t getPlayerLives() const;
@@ -55,6 +62,10 @@ private:
 
 	int _activeTable;
 	int _tableMemoryOffset;
+
+	QuitState _quitGameActive;
+	float _quitGameTimer;
+
 
 };
 

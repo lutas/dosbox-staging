@@ -76,7 +76,7 @@ void PinballMenu::update(float frameTime)
 		return;
 	}
 	if (_displayMenu) {
-		handleControls(frameTime);
+		handleMenuControls(frameTime);
 	}
 
 	if (_pressKey.active) {
@@ -90,7 +90,7 @@ void PinballMenu::update(float frameTime)
 	}
 }
 
-void PinballMenu::handleControls(float frameTime)
+void PinballMenu::handleMenuControls(float frameTime)
 {
 	if (_keyRepeatDelay > 0) {
 		_keyRepeatDelay -= frameTime;
@@ -110,7 +110,7 @@ void PinballMenu::handleControls(float frameTime)
 		if (_activeTable >= NumTables) {
 			_activeTable = 0;
 		}
-		//KEYBOARD_ClrBuffer();
+		KEYBOARD_ClrBuffer();
 	} else if (KEYBOARD_IsKeyPressed(29, false)) {
 		// left ctrl
 		_keyRepeatDelay = MaxKeyRepeatDelay;
@@ -119,7 +119,7 @@ void PinballMenu::handleControls(float frameTime)
 		if (_activeTable < 0) {
 			_activeTable = NumTables - 1;
 		}
-		//KEYBOARD_ClrBuffer();
+		KEYBOARD_ClrBuffer();
 	}
 	#if _DEBUG
 	if (KEYBOARD_IsKeyPressed(54, false)) {
@@ -304,8 +304,7 @@ void PinballMenu::render(Bit8u* frameBuffer, int width, int height)
 	if (_activateTable == -1) {
 		GraphicsHelper::setPalette(_menuGraphic);
 		GraphicsHelper::clear(fb, 0xff);
+		renderTableSelection(fb);
+		//renderHiscores(fb);
 	}
-
-	renderTableSelection(fb);
-	renderHiscores(fb);
 }

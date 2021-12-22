@@ -62,7 +62,7 @@ private:
 
 	PinballVars *pPinballVars;
 
-	void handleControls(float frameTime);
+	void handleMenuControls(float frameTime);
 
 	bool _displayMenu;
 
