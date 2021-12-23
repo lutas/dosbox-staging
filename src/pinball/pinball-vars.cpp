@@ -243,12 +243,14 @@ void PinballVars::update(float frameTime)
 		if (_quitGameTimer <= 0) {
 			// n = 49, y = 21
 			if (KEYBOARD_IsKeyPressed(1, false)) {
+				// if escape pressed again, then send cancel quit (N key)
 				KEYBOARD_ClrBuffer();
 				KEYBOARD_AddKey(KBD_n, true);
 
 				_quitGameActive = QuitState::QuitCancelled;
 				_quitGameTimer = 0.2f;
-			} else if (KEYBOARD_IsKeyPressed(54, false)) {
+			} else if (KEYBOARD_IsKeyPressed(54, false) || KEYBOARD_IsKeyPressed(57, false)) {
+				// if shift or space, then send confirm quit (Y key)
 				KEYBOARD_ClrBuffer();
 				KEYBOARD_AddKey(KBD_y, true);
 
