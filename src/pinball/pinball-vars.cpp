@@ -52,6 +52,8 @@ void PinballVars::setActiveTable(int table)
 void PinballVars::setGameState(const GameState &state)
 {
 	if (state != _activeGameState) {
+
+		_prevGameState = _activeGameState;
 		_activeGameState = state;
 
 		// notify something
@@ -270,7 +272,8 @@ void PinballVars::update(float frameTime)
 			KEYBOARD_AddKey(KBD_esc, true);
 
 			_quitGameActive = QuitState::QuitPressed;
-			_quitGameTimer = 0.2f;
+			setGameState(GameState::Paused);
+			_quitGameTimer = 0.2f;			
 		}
 		break;
 
@@ -281,6 +284,9 @@ void PinballVars::update(float frameTime)
 			
 			_quitGameActive = QuitState::Playing;
 			_quitGameTimer = 0.2f;
+
+			// reset to state before paused
+			setGameState(_prevGameState);
 		}
 		break;
 
@@ -291,6 +297,8 @@ void PinballVars::update(float frameTime)
 
 			_quitGameActive = QuitState::Playing;
 			_quitGameTimer = 0.2f;
+
+			setGameState(GameState::Menu);
 		}
 		break;
 	}

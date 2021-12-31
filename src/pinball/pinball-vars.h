@@ -14,7 +14,8 @@ public:
 		PressStart,
 		LaunchBall,
 		BallInPlay,
-		LifeLost
+		LifeLost,
+		Paused
 	};
 
 	enum LightId {
@@ -56,6 +57,7 @@ private:
 	GameState deduceState() const;
 
 	GameState _activeGameState;
+	GameState _prevGameState;
 
 	PinballSerial *_pPinballLights;
 	PinballHiscore _hiscore;
