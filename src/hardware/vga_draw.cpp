@@ -45,7 +45,7 @@ static Bit8u TempLine[SCALER_MAXWIDTH * 4];
 static PinballDM pinballDM;
 static PinballSerial pinballSerial;
 static PinballSerial pinballLights;
-static PinballVars pinballVars(pinballLights);
+static PinballVars pinballVars(pinballSerial, pinballLights);
 static PinballMenu pinballMenu(pinballVars);
 
 static Bit8u * VGA_Draw_1BPP_Line(Bitu vidstart, Bitu line) {
@@ -812,18 +812,37 @@ static void INLINE VGA_ChangesStart( void ) {
 // start a few frames early to prevent crash when rescaling window
 static int frame = -15;
 static void VGA_VertInterrupt(Bitu /*val*/) {
-	if (pinhack.dotmatrix.on) {
-		pinballDM.updateData(vga.draw.linear_base);
-		if (frame++ == 20) {
-			pinballSerial.sendDMBuffer(pinballDM);
-			frame = 0;
-		}
-	}
-
 	const float frameTime = 1 / 60.0f;
 
 	pinballVars.update(frameTime);
 	pinballMenu.update(frameTime);
+
+	if (pinhack.dotmatrix.on) {
+		// game vars
+		if (frame % 10 == 0) {
+			PinballVars::GameState gameState =
+				    pinballVars.getGameState();
+
+			uint8_t level = (uint8_t)pinballVars.getActiveTable();
+			if (gameState == PinballVars::GameState::Menu) {
+				level = (uint8_t) pinballMenu.getSelectedTable();
+			}
+
+			pinballSerial.sendLevelData(level, (uint8_t)gameState, 0);
+		}
+		
+		// dot matrix
+		if (frame >= 30) {
+			if (pinballVars.isPlayingOnATable()) {
+				pinballDM.updateData(vga.draw.linear_base);
+				pinballSerial.sendDMBuffer(pinballDM);
+			}
+
+			frame = -1;
+		}
+
+		frame++;
+	}
 
 	if (pinballMenu.isActive()) {
 
@@ -1624,6 +1643,10 @@ void VGA_SetupDrawing(Bitu /*val*/) {
 		}
 	}
 	if (pinhack.enabled) {
+		if (pinhack.dotmatrix.on && !pinballSerial.isConnected()) {
+			pinballSerial.connect(pinhack.dotmatrix.port);
+		}
+
 		if (pinhack.buttonlights.on && !pinballLights.isConnected()) {
 			pinballLights.connect(pinhack.buttonlights.port);
 		}                    // Enabled in config?
@@ -1653,11 +1676,6 @@ void VGA_SetupDrawing(Bitu /*val*/) {
 			    pinhack.specifichack.pinballdreams.trigger = false; // On next resolution change, return to
 			               // normal
 
-			if (pinhack.dotmatrix.on) {
-				if (!pinballSerial.isConnected()) {
-					pinballSerial.connect(pinhack.dotmatrix.port);
-				}
-			}
 
 			pinballMenu.setActive(false);
 		}

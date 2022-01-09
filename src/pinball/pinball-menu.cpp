@@ -59,7 +59,7 @@ void PinballMenu::setActive(bool active)
 		pPinballVars->setGameState(PinballVars::GameState::PressStart);
 		KEYBOARD_ClrBuffer();
 	} else {
-		pPinballVars->setActiveTable(-1);
+		//pPinballVars->setActiveTable(-1);
 
 		pPinballVars->setGameState(PinballVars::GameState::Menu);
 		KEYBOARD_ClrBuffer();

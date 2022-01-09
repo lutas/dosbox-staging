@@ -45,6 +45,8 @@ public:
 	void setActive(bool active);
 	bool isActive() const { return _displayMenu; }
 
+	int getSelectedTable() const { return _activeTable; }
+
 	void update(float frameTime);
 	void render(Bit8u *frameBuffer, int width, int height);
 

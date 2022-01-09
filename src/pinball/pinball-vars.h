@@ -34,7 +34,7 @@ public:
 		QuitCancelled
 	};
 
-	PinballVars(PinballSerial& pinballLights);
+	PinballVars(PinballSerial& pinballDotMatrix, PinballSerial& pinballLights);
 
 	uint8_t getPlayerLives() const;
 	uint16_t getBallX() const;
@@ -45,6 +45,8 @@ public:
 	// -1 = no table
 	int getActiveTable() const;
 	void setActiveTable(int table);
+
+	bool isPlayingOnATable() const;
 
 	GameState getGameState() const { return _activeGameState; }
 	void setGameState(const GameState &state);
@@ -59,6 +61,7 @@ private:
 	GameState _activeGameState;
 	GameState _prevGameState;
 
+	PinballSerial *_pPinballDotMatrix;
 	PinballSerial *_pPinballLights;
 	PinballHiscore _hiscore;
 

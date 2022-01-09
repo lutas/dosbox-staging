@@ -1,5 +1,12 @@
 #include "pinball-serial.h"
 
+namespace {
+
+	extern uint8_t SerialFlag = 0x08;
+	extern uint8_t LevelDetailsMode = 0x01;
+    extern uint8_t DotMatrixBufferMode = 0x02;
+} // namespace
+
 PinballSerial::PinballSerial()
         :
 	_comport(NULL),
@@ -13,7 +20,8 @@ PinballSerial::~PinballSerial()
 
 bool PinballSerial::connect(const char *port)
 {
-	disconnect();
+	if (_connected) 
+		disconnect();
 
 	if (!SERIAL_open(port, &_comport)) {
 		char errorbuffer[256];
@@ -42,6 +50,26 @@ bool PinballSerial::isConnected() const
 	return _connected;
 }
 
+void PinballSerial::sendLevelData(uint8_t activeTable, uint8_t gameState, long score)
+{
+	if (!_connected) {
+		return;
+	}
+
+	SERIAL_senddata(_comport, (void *)&SerialFlag, sizeof(uint8_t));
+	SERIAL_senddata(_comport, (void *)&SerialFlag, sizeof(uint8_t));
+	SERIAL_senddata(_comport, (void *)&SerialFlag, sizeof(uint8_t));
+	SERIAL_senddata(_comport, (void *)&SerialFlag, sizeof(uint8_t));
+
+	SERIAL_senddata(_comport, (void *)&LevelDetailsMode, sizeof(uint8_t));
+
+	SERIAL_senddata(_comport, (void *)&activeTable, sizeof(uint8_t));
+	SERIAL_senddata(_comport, (void *)&gameState, sizeof(uint8_t));
+	//SERIAL_senddata(_comport, (void *)&score, sizeof(long));
+
+
+}
+
 void PinballSerial::sendDMBuffer(const PinballDM &dm)
 {
 	if (!_connected) {
@@ -49,9 +77,16 @@ void PinballSerial::sendDMBuffer(const PinballDM &dm)
 	}
 	const int numChars = dm.getNumCharacters();
 
+	SERIAL_senddata(_comport, (void *)&SerialFlag, sizeof(uint8_t));
+	SERIAL_senddata(_comport, (void *)&SerialFlag, sizeof(uint8_t));
+	SERIAL_senddata(_comport, (void *)&SerialFlag, sizeof(uint8_t));
+	SERIAL_senddata(_comport, (void *)&SerialFlag, sizeof(uint8_t));
+
+	SERIAL_senddata(_comport, (void*)&DotMatrixBufferMode, sizeof(uint8_t));
+
 	for (int i = 0; i < numChars; ++i) {
 		uint16_t val = dm.getCharacterForTransport(i);
-		SERIAL_senddata(_comport, (void*)val, sizeof(val));
+		SERIAL_senddata(_comport, (void*)&val, sizeof(val));
 	}
 }
 

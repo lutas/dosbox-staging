@@ -12,6 +12,7 @@ public:
 	bool connect(const char *port);
 	bool isConnected() const;
 
+	void sendLevelData(uint8_t activeTable, uint8_t gameState, long score);
 	void sendDMBuffer(const PinballDM &dm);
 	void setLight(uint16_t light, bool on);
 

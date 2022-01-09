@@ -24,8 +24,9 @@ namespace MemOffset {
 	const int InPlay = Lives - 2527;
 }
 
-PinballVars::PinballVars(PinballSerial &pinballLights)
+PinballVars::PinballVars(PinballSerial& pinballDotMatrix, PinballSerial &pinballLights)
         : 
+	_pPinballDotMatrix(&pinballDotMatrix),
 	_pPinballLights(&pinballLights),
 	_activeGameState(GameState::Startup),
 	_activeTable(0),
@@ -130,8 +131,30 @@ void PinballVars::setGameState(const GameState &state)
 		case GameState::Menu: GFX_SetTitle("Menu"); break;
 		case GameState::Startup: GFX_SetTitle("Startup"); break;
 		case GameState::PressStart: GFX_SetTitle("Press Start"); break;
+		case GameState::Paused: GFX_SetTitle("Paused"); break;
 		}
 #endif
+	}
+}
+
+bool PinballVars::isPlayingOnATable() const
+{
+	if (_activeTable < 0) {
+		return false;
+	}
+
+	switch (_activeGameState) {
+		case GameState::PressStart:
+		case GameState::LaunchBall:
+		case GameState::BallInPlay:
+		case GameState::LifeLost:
+		case GameState::Paused: {
+			return true;
+		}
+
+		default: {
+			return false;
+		}
 	}
 }
 
