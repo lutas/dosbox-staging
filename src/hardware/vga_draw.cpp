@@ -819,9 +819,8 @@ static void VGA_VertInterrupt(Bitu /*val*/) {
 
 	if (pinhack.dotmatrix.on) {
 		// game vars
+		PinballVars::GameState gameState = pinballVars.getGameState();
 		if (frame % 10 == 0) {
-			PinballVars::GameState gameState =
-				    pinballVars.getGameState();
 
 			uint8_t level = (uint8_t)pinballVars.getActiveTable();
 			if (gameState == PinballVars::GameState::Menu) {
@@ -830,18 +829,25 @@ static void VGA_VertInterrupt(Bitu /*val*/) {
 
 			pinballSerial.sendLevelData(level, (uint8_t)gameState, 0);
 		}
+
+		int dotMatrixUpdate = 30; //update twice a second
+		if (gameState == PinballVars::GameState::PressStart ||
+		    gameState == PinballVars::GameState::LifeLost) {
+			dotMatrixUpdate = 10; // ~6x second
+		}
 		
 		// dot matrix
-		if (frame >= 30) {
+		if (frame % dotMatrixUpdate == 1) { //1 = don't send data in the same frame as level data
 			if (pinballVars.isPlayingOnATable()) {
 				pinballDM.updateData(vga.draw.linear_base);
 				pinballSerial.sendDMBuffer(pinballDM);
 			}
-
-			frame = -1;
 		}
 
 		frame++;
+		if (frame > 60) {
+			frame = 0;
+		}
 	}
 
 	if (pinballMenu.isActive()) {
