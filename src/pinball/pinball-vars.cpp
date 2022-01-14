@@ -64,7 +64,7 @@ void PinballVars::setGameState(const GameState &state)
 			_pPinballLights->setLight(LightId::RightBumper, true);
 			_pPinballLights->setLight(LightId::Space, false);
 			_pPinballLights->setLight(LightId::Start, false);
-			_pPinballLights->setLight(LightId::Escape, true);
+			_pPinballLights->setLight(LightId::Escape, false);
 			_pPinballLights->setLight(LightId::Launch, false);
 		} 
 		break;
@@ -73,7 +73,7 @@ void PinballVars::setGameState(const GameState &state)
 			_pPinballLights->setLight(LightId::RightBumper, false);
 			_pPinballLights->setLight(LightId::Space, false);
 			_pPinballLights->setLight(LightId::Start, false);
-			_pPinballLights->setLight(LightId::Escape, true);
+			_pPinballLights->setLight(LightId::Escape, false);
 			_pPinballLights->setLight(LightId::Launch, true);
 		} break;
 		case GameState::LifeLost: {
@@ -109,7 +109,7 @@ void PinballVars::setGameState(const GameState &state)
 			_pPinballLights->setLight(LightId::RightBumper, false);
 			_pPinballLights->setLight(LightId::Space, false);
 			_pPinballLights->setLight(LightId::Start, true);
-			_pPinballLights->setLight(LightId::Escape, true);
+			_pPinballLights->setLight(LightId::Escape, false);
 			_pPinballLights->setLight(LightId::Launch, false);
 		} break;
 		case GameState::Paused: {
