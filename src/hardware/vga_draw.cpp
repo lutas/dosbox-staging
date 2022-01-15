@@ -833,7 +833,7 @@ static void VGA_VertInterrupt(Bitu /*val*/) {
 		int dotMatrixUpdate = 30; //update twice a second
 		if (gameState == PinballVars::GameState::PressStart ||
 		    gameState == PinballVars::GameState::LifeLost) {
-			dotMatrixUpdate = 6; // ~10x second
+			dotMatrixUpdate = 3; // ~20x second
 		}
 		
 		// dot matrix
